@@ -6,7 +6,7 @@ Plataforma interactiva estilo *Arcade Hub* desarrollada con tecnologías web nat
 
 ## 🚀 Demo en Vivo
 Puedes probar la plataforma y jugar directamente aquí:  
-👉 **[Ver Demo en Render](https://github.com/Juanesteban6670/Sala-de-juegos.git)** 
+👉 **[Ver Demo en Render](https://sala-de-juegos-jjvg.onrender.com)** 
 
 ---
 
