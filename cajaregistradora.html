@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supermarket Cashier Pro: Deluxe Edition</title>
+  <style>
+    :root {
+      --bg-wall: #1e293b;
+      --counter-top: #334155;
+      --belt-track: #0f172a;
+      --screen-lcd: #10b981;
+      --screen-bg: #022c22;
+      --pos-bg: #0f172a;
+      --pos-border: #38bdf8;
+      --accent: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #090d16;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #f8fafc;
+      overflow: hidden;
+    }
+
+    #game-container {
+      width: 1060px;
+      height: 720px;
+      background: #0f172a;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 0 2px rgba(255,255,255,0.05);
+      position: relative;
+    }
+
+    /* Barra Superior */
+    header {
+      background: #1e293b;
+      border-bottom: 2px solid #334155;
+      padding: 10px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .header-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .badge {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      padding: 4px 10px;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 0.8rem;
+      box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4);
+    }
+
+    .header-btn {
+      background: #334155;
+      border: 1px solid #475569;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+
+    .header-btn:hover {
+      background: #475569;
+      transform: translateY(-1px);
+    }
+
+    /* Área de Tienda / Clientes */
+    #store-view {
+      height: 330px;
+      background: radial-gradient(circle at 50% 20%, #334155 0%, #0f172a 100%);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 14px 24px;
+    }
+
+    #customer-area {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #customer-bubble {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(4px);
+      padding: 8px 18px;
+      border-radius: 30px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      color: #0f172a;
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 2px solid #e2e8f0;
+    }
+
+    #customer-avatar {
+      font-size: 2.2rem;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+    }
+
+    #patience-bar-container {
+      width: 220px;
+      height: 12px;
+      background: #1e293b;
+      border: 1px solid #475569;
+      border-radius: 10px;
+      overflow: hidden;
+      padding: 2px;
+    }
+
+    #patience-bar {
+      width: 100%;
+      height: 100%;
+      background: #10b981;
+      border-radius: 6px;
+      transition: width 0.15s linear, background-color 0.3s ease;
+    }
+
+    /* Mostrador */
+    #checkout-surface {
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+      position: relative;
+    }
+
+    /* Cinta transportadora */
+    #conveyor-belt {
+      flex: 1;
+      height: 120px;
+      background: repeating-linear-gradient(90deg, #1e293b, #1e293b 25px, #0f172a 25px, #0f172a 50px);
+      border: 3px solid #475569;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 16px;
+      overflow-x: auto;
+      box-shadow: inset 0 6px 12px rgba(0,0,0,0.6);
+    }
+
+    .item {
+      min-width: 80px;
+      height: 86px;
+      background: #ffffff;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s;
+      position: relative;
+      border: 2px solid transparent;
+    }
+
+    .item:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+      border-color: #38bdf8;
+    }
+
+    .item-icon { font-size: 2.2rem; }
+    .item-price { font-size: 0.75rem; font-weight: 800; color: #059669; margin-top: 2px; }
+    .item-tag {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #ef4444;
+      color: white;
+      font-size: 0.6rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-weight: bold;
+    }
+
+    /* Báscula */
+    #scale-zone {
+      width: 100px;
+      height: 120px;
+      background: linear-gradient(180deg, #64748b, #475569);
+      border: 3px solid #334155;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px;
+      cursor: pointer;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    #scale-display {
+      background: #022c22;
+      color: #10b981;
+      font-family: monospace;
+      font-size: 0.82rem;
+      font-weight: bold;
+      padding: 4px;
+      border-radius: 4px;
+      width: 100%;
+      text-align: center;
+      box-shadow: inset 0 0 6px rgba(16, 185, 129, 0.4);
+    }
+
+    /* Escáner */
+    #scanner-zone {
+      width: 110px;
+      height: 120px;
+      background: linear-gradient(180deg, #475569, #334155);
+      border: 3px solid #64748b;
+      border-radius: 10px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #e2e8f0;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    #scanner-laser {
+      position: absolute;
+      width: 100%;
+      height: 3px;
+      background: #ef4444;
+      box-shadow: 0 0 10px 2px #ef4444;
+      animation: scanLaser 1.2s infinite alternate ease-in-out;
+    }
+
+    @keyframes scanLaser {
+      0% { top: 15%; opacity: 0.3; }
+      100% { top: 85%; opacity: 1; }
+    }
+
+    /* Bolsa */
+    #bag-zone {
+      width: 90px;
+      height: 120px;
+      background: #ca8a04;
+      border: 3px dashed #fef08a;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #422006;
+      text-align: center;
+    }
+
+    /* Escritorio Inferior */
+    #desk-area {
+      height: 330px;
+      background: #1e293b;
+      border-top: 3px solid #334155;
+      display: flex;
+      padding: 14px;
+      gap: 16px;
+    }
+
+    /* Pantalla Registradora */
+    #register-screen {
+      width: 290px;
+      background: var(--screen-bg);
+      border: 4px solid #064e3b;
+      border-radius: 10px;
+      padding: 12px;
+      color: var(--screen-lcd);
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: inset 0 0 15px rgba(16, 185, 129, 0.2);
+    }
+
+    .screen-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+      margin-bottom: 3px;
+    }
+
+    .highlight-due {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: #34d399;
+      border-top: 1px dashed #065f46;
+      padding-top: 4px;
+      margin-top: 4px;
+    }
+
+    #change-breakdown {
+      font-size: 0.75rem;
+      color: #6ee7b7;
+      height: 38px;
+      overflow-y: auto;
+      border-top: 1px dotted #065f46;
+      padding-top: 4px;
+      word-break: break-all;
+    }
+
+    /* Contenedor Terminales */
+    #terminal-container {
+      flex: 1;
+      background: #0f172a;
+      border: 2px solid #334155;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .tab-bar {
+      display: flex;
+      background: #1e293b;
+      border-bottom: 2px solid #334155;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 9px 14px;
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: #0f172a;
+      color: #38bdf8;
+      border-bottom: 2px solid #38bdf8;
+    }
+
+    .terminal-tab {
+      flex: 1;
+      padding: 12px 16px;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .terminal-tab.active {
+      display: flex;
+    }
+
+    /* Cajón Efectivo */
+    .money-row {
+      display: flex;
+      gap: 10px;
+      justify-content: space-around;
+      margin-bottom: 6px;
+    }
+
+    .cash-btn {
+      flex: 1;
+      padding: 11px 4px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+      transition: all 0.1s;
+    }
+
+    .cash-btn:active {
+      transform: translateY(3px);
+      box-shadow: none;
+    }
+
+    .bill { background: #15803d; color: #f0fdf4; border: 1px solid #16a34a; }
+    .bill-high { background: #0369a1; color: #f0f9ff; border: 1px solid #0284c7; }
+    .coin { background: #d97706; color: #fffbeb; border-radius: 50%; width: 50px; height: 50px; flex: none; border: 1px solid #b45309; }
+
+    #uv-detector-btn {
+      background: #7c3aed;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.8rem;
+      margin-bottom: 6px;
+    }
+
+    /* REDISEÑO COMPLETO DATÁFONO / POS */
+    #pos-terminal-chassis {
+      display: flex;
+      gap: 20px;
+      height: 100%;
+      align-items: center;
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 2px solid #334155;
+      border-radius: 12px;
+      padding: 12px 18px;
+      box-shadow: inset 0 2px 6px rgba(255,255,255,0.05);
+    }
+
+    #pos-left-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      gap: 8px;
+    }
+
+    .pos-screen-panel {
+      background: #022c22;
+      border: 2px solid #059669;
+      border-radius: 8px;
+      padding: 10px 14px;
+      box-shadow: inset 0 0 10px rgba(5, 150, 105, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .pos-status-text {
+      font-size: 0.72rem;
+      color: #34d399;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pos-screen-digits {
+      color: #10b981;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.8rem;
+      font-weight: 900;
+      text-align: right;
+      letter-spacing: 1px;
+    }
+
+    /* Ranura de Tarjeta Interactiva */
+    #pos-card-slot {
+      background: #1e293b;
+      border: 2px dashed #475569;
+      border-radius: 8px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    #pos-card-slot:hover {
+      border-color: #38bdf8;
+      background: #243248;
+    }
+
+    .credit-card-graphic {
+      width: 52px;
+      height: 32px;
+      background: linear-gradient(135deg, #f59e0b, #b45309);
+      border-radius: 4px;
+      position: relative;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 4px;
+      transition: transform 0.2s;
+    }
+
+    .card-chip {
+      position: absolute;
+      left: 6px;
+      width: 9px;
+      height: 8px;
+      background: #fef08a;
+      border-radius: 2px;
+    }
+
+    /* Teclado Numérico Rediseñado */
+    #pos-right-column {
+      width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .numpad-compact {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .num-btn {
+      padding: 10px 4px;
+      background: #334155;
+      color: #f8fafc;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #1e293b;
+      transition: all 0.08s;
+    }
+
+    .num-btn:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+
+    .num-btn.accent-btn {
+      background: #0284c7;
+      color: white;
+      box-shadow: 0 3px 0 #0369a1;
+    }
+
+    .num-btn.cancel-btn {
+      background: #ef4444;
+      color: white;
+      box-shadow: 0 3px 0 #b91c1c;
+    }
+
+    .num-btn.quick-fill {
+      background: #d97706;
+      color: white;
+      box-shadow: 0 3px 0 #92400e;
+      font-size: 0.8rem;
+    }
+
+    #btn-process-pos {
+      padding: 11px;
+      background: #10b981;
+      border: none;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #059669;
+      transition: all 0.1s;
+    }
+
+    #btn-process-pos:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+
+    /* Acciones Generales */
+    .drawer-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 11px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+      transition: opacity 0.15s;
+    }
+
+    .action-btn:hover { opacity: 0.9; }
+    #btn-finish { background: #10b981; }
+    #btn-clear { background: #ef4444; }
+
+    /* Efectos Flotantes y Canvas */
+    #canvas-fx {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 60;
+    }
+
+    .toast-score {
+      position: absolute;
+      font-size: 1.8rem;
+      font-weight: 900;
+      pointer-events: none;
+      animation: floatUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      z-index: 70;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.7);
+    }
+
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(0.9); }
+      100% { opacity: 0; transform: translate(-50%, -120px) scale(1.2); }
+    }
+
+    /* Modales */
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(8px);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      z-index: 100;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .overlay button {
+      padding: 12px 28px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      border-radius: 10px;
+      background: #10b981;
+      color: white;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+      transition: all 0.2s;
+    }
+
+    #plu-modal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 12px;
+      border: 2px solid #ef4444;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+      z-index: 80;
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      width: 280px;
+      text-align: center;
+    }
+
+    #plu-input {
+      padding: 10px;
+      font-size: 1.2rem;
+      text-align: center;
+      font-family: monospace;
+      font-weight: bold;
+      border-radius: 6px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #38bdf8;
+    }
+  </style>
+</head>
+<body>
+
+<div id="game-container">
+  <canvas id="canvas-fx"></canvas>
+
+  <!-- Barra Superior -->
+  <header>
+    <div class="header-group">
+      <span>🛒 SuperCajero Deluxe</span>
+      <span class="badge" id="day-display">Día 1</span>
+      <span class="badge" id="combo-display">Combo: x1</span>
+    </div>
+    <div class="header-group">
+      <div>Dinero: $<span id="score">0.00</span></div>
+      <div>Récord: $<span id="high-score">0.00</span></div>
+      <div>Vidas: <span id="lives">❤️❤️❤️</span></div>
+      <button class="header-btn" onclick="openShop()">🏪 Tienda</button>
+      <button class="header-btn" id="pause-btn" onclick="togglePause()">⏸ Pausa</button>
+    </div>
+  </header>
+
+  <!-- Área de Clientes y Mostrador -->
+  <div id="store-view">
+    <div id="customer-area">
+      <div id="customer-bubble">
+        <span id="customer-avatar">👤</span>
+        <div>
+          <div id="customer-name" style="font-size: 0.75rem; color: #64748b;">Cliente</div>
+          <span id="customer-state">Esperando artículos...</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem; font-weight:700; margin-bottom:4px; color:#cbd5e1; text-align:right;">Paciencia:</div>
+        <div id="patience-bar-container">
+          <div id="patience-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cinta, Báscula, Escáner y Bolsa -->
+    <div id="checkout-surface">
+      <div id="conveyor-belt"></div>
+
+      <div id="scale-zone" onclick="weighItem()">
+        <span style="font-size: 0.65rem; font-weight:800; color:#f8fafc;">BÁSCULA</span>
+        <div id="scale-display">0.000 kg</div>
+        <span style="font-size: 0.65rem; color:#e2e8f0;">Pesar Fruta</span>
+      </div>
+
+      <div id="scanner-zone">
+        <div id="scanner-laser"></div>
+        <span>ESCÁNER</span>
+        <span style="font-size: 0.65rem; color: #94a3b8;">Láser Activo</span>
+      </div>
+
+      <div id="bag-zone">
+        <span style="font-size: 1.5rem;">🛍️</span>
+        <span>BOLSA (<span id="bagged-count">0</span>)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Escritorio de Trabajo Inferior -->
+  <div id="desk-area">
+    <!-- Pantalla Registradora -->
+    <div id="register-screen">
+      <div>
+        <div class="screen-row"><span>SUBTOTAL:</span><span id="screen-subtotal">$0.00</span></div>
+        <div class="screen-row"><span>DESCUENTO:</span><span id="screen-discount" style="color:#ef4444;">-$0.00</span></div>
+        <div class="screen-row"><span>TOTAL:</span><span id="screen-total">$0.00</span></div>
+        <div class="screen-row"><span>PAGO CLIENTE:</span><span id="screen-paid">$0.00</span></div>
+        <div class="screen-row highlight-due"><span>CAMBIO A DAR:</span><span id="screen-due">$0.00</span></div>
+      </div>
+      <div>
+        <div class="screen-row" style="color: #fbbf24;">
+          <span>ENTREGADO:</span><span id="screen-given">$0.00</span>
+        </div>
+        <div id="change-breakdown">Desglose: Ninguno</div>
+      </div>
+    </div>
+
+    <!-- Panel de Cobro (Efectivo vs Datáfono) -->
+    <div id="terminal-container">
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-btn-cash" onclick="switchTab('cash')">💵 Cajón de Efectivo</button>
+        <button class="tab-btn" id="tab-btn-card" onclick="switchTab('card')">💳 Datáfono / POS</button>
+      </div>
+
+      <!-- Tab Efectivo -->
+      <div class="terminal-tab active" id="tab-cash">
+        <button id="uv-detector-btn" onclick="toggleUVCheck()">🔦 Activar Linterna UV (Verificar Billetes)</button>
+        <div class="money-row">
+          <button class="cash-btn bill-high" onclick="giveCash(50, '$50')">+$50</button>
+          <button class="cash-btn bill-high" onclick="giveCash(20, '$20')">+$20</button>
+          <button class="cash-btn bill" onclick="giveCash(10, '$10')">+$10</button>
+          <button class="cash-btn bill" onclick="giveCash(5, '$5')">+$5</button>
+          <button class="cash-btn bill" onclick="giveCash(1, '$1')">+$1</button>
+        </div>
+        <div class="money-row" style="justify-content: center; gap: 10px;">
+          <button class="cash-btn coin" onclick="giveCash(0.50, '50¢')">50¢</button>
+          <button class="cash-btn coin" onclick="giveCash(0.25, '25¢')">25¢</button>
+          <button class="cash-btn coin" onclick="giveCash(0.10, '10¢')">10¢</button>
+          <button class="cash-btn coin" onclick="giveCash(0.05, '5¢')">5¢</button>
+        </div>
+        <div class="drawer-actions">
+          <button id="btn-clear" class="action-btn" onclick="clearChange()">Borrar Cambio</button>
+          <button id="btn-finish" class="action-btn" onclick="submitCashChange()">Entregar Vuelto</button>
+        </div>
+      </div>
+
+      <!-- Tab Datáfono / Tarjeta Rediseñado -->
+      <div class="terminal-tab" id="tab-card">
+        <div id="pos-terminal-chassis">
+          <!-- Columna Izquierda: Pantalla + Ranura de Chip -->
+          <div id="pos-left-column">
+            <div class="pos-screen-panel">
+              <div class="pos-status-text" id="pos-status">
+                <span>●</span> INSERTE MONTO
+              </div>
+              <div class="pos-screen-digits" id="pos-display">$0.00</div>
+            </div>
+
+            <!-- Ranura de tarjeta interactiva -->
+            <div id="pos-card-slot" onclick="insertCardGraphic()">
+              <div>
+                <div style="font-size:0.8rem; font-weight:800; color:#f8fafc;" id="card-slot-label">💳 Tarjeta Lista</div>
+                <div style="font-size:0.68rem; color:#94a3b8;">Haz clic para insertar chip</div>
+              </div>
+              <div class="credit-card-graphic" id="visual-card">
+                <div class="card-chip"></div>
+                <span style="font-size:0.65rem; font-weight:bold; color:white;">VISA</span>
+              </div>
+            </div>
+
+            <div style="font-size:0.75rem; color:#64748b;">
+              ⌨️ Puedes usar los números de tu teclado físico y <kbd>Enter</kbd>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Teclado Numérico Compacto -->
+          <div id="pos-right-column">
+            <div class="numpad-compact">
+              <button class="num-btn" onclick="posInput('1')">1</button>
+              <button class="num-btn" onclick="posInput('2')">2</button>
+              <button class="num-btn" onclick="posInput('3')">3</button>
+              <button class="num-btn quick-fill" onclick="posAutoFill()" title="Copiar Total">TOTAL</button>
+
+              <button class="num-btn" onclick="posInput('4')">4</button>
+              <button class="num-btn" onclick="posInput('5')">5</button>
+              <button class="num-btn" onclick="posInput('6')">6</button>
+              <button class="num-btn cancel-btn" onclick="posClear()">C</button>
+
+              <button class="num-btn" onclick="posInput('7')">7</button>
+              <button class="num-btn" onclick="posInput('8')">8</button>
+              <button class="num-btn" onclick="posInput('9')">9</button>
+              <button class="num-btn accent-btn" onclick="posBackspace()">⌫</button>
+
+              <button class="num-btn" onclick="posInput('.')">.</button>
+              <button class="num-btn" onclick="posInput('0')">0</button>
+              <button class="num-btn" onclick="posInput('00')">00</button>
+              <button class="num-btn accent-btn" onclick="insertCardGraphic()">📥</button>
+            </div>
+            <button id="btn-process-pos" onclick="submitCardPayment()">✔ PROCESAR PAGO</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Código Dañado -->
+  <div id="plu-modal">
+    <h3 style="margin:0; font-size:1rem; color:#ef4444;">¡Código de Barras Dañado!</h3>
+    <p style="font-size:0.8rem; margin:0; color:#cbd5e1;">Ingresa el código PLU impreso en la etiqueta:</p>
+    <div id="plu-required" style="font-weight:bold; font-size:1.4rem; letter-spacing:3px; color:#facc15;">1234</div>
+    <input type="text" id="plu-input" maxlength="4" placeholder="4 dígitos" autocomplete="off" />
+    <button class="header-btn" style="background:#10b981;" onclick="validatePLU()">Confirmar Código</button>
+  </div>
+
+  <!-- Pantallas Overlay -->
+  <div id="start-overlay" class="overlay">
+    <h1 style="font-size:2.2rem; margin:0; color:#38bdf8;">Supermarket Cashier Pro 2D</h1>
+    <p style="max-width:550px; line-height:1.6; color:#cbd5e1;">
+      Escanea productos con el láser, usa la <strong>báscula</strong> para frutas a granel y atiende pagos con el nuevo <strong>datáfono de tarjeta</strong> o en efectivo.
+    </p>
+    <button onclick="startGame()">Empezar Turno</button>
+  </div>
+
+  <div id="shop-overlay" class="overlay" style="display:none;">
+    <h2>🏪 Tienda de Mejoras</h2>
+    <div style="display:flex; gap:16px; max-width:600px; text-align:left;">
+      <div style="background:#1e293b; padding:14px; border-radius:8px; flex:1;">
+        <h4>☕ Café Doble</h4>
+        <p style="font-size:0.8rem; color:#94a3b8;">Los clientes esperan 25% más tiempo.</p>
+        <button onclick="buyUpgrade('coffee', 50)" id="buy-coffee-btn">Comprar ($50)</button>
+      </div>
+      <div style="background:#1e293b; padding:14px; border-radius:8px; flex:1;">
+        <h4>⚡ Escáner Rápido</h4>
+        <p style="font-size:0.8rem; color:#94a3b8;">Bonificaciones de puntos aumentadas.</p>
+        <button onclick="buyUpgrade('laser', 100)" id="buy-laser-btn">Comprar ($100)</button>
+      </div>
+    </div>
+    <button style="margin-top:14px; background:#475569;" onclick="closeShop()">Volver al Trabajo</button>
+  </div>
+
+  <div id="pause-overlay" class="overlay" style="display: none;">
+    <h2>⏸ Turno en Pausa</h2>
+    <button onclick="togglePause()">Reanudar</button>
+  </div>
+
+  <div id="gameover-overlay" class="overlay" style="display: none;">
+    <h2 style="color:#ef4444;">¡Fin del Contrato!</h2>
+    <p>Recaudación Total: <span id="final-score" style="font-weight:bold; color:#facc15;">$0.00</span></p>
+    <button onclick="startGame()">Nuevo Turno</button>
+  </div>
+</div>
+
+<script>
+  const PRODUCTS = [
+    { name: 'Leche Deslactosada', icon: '🥛', price: 2.60, isWeight: false },
+    { name: 'Pan Baguette', icon: '🥖', price: 1.40, isWeight: false },
+    { name: 'Cereal Integral', icon: '🥣', price: 3.80, isWeight: false },
+    { name: 'Queso Gouda', icon: '🧀', price: 4.50, isWeight: false },
+    { name: 'Café Espresso', icon: '☕', price: 5.20, isWeight: false },
+    { name: 'Chocolate Negro', icon: '🍫', price: 2.10, isWeight: false },
+    { name: 'Botella de Aceite', icon: '🍾', price: 6.30, isWeight: false },
+    { name: 'Pescado Fresco', icon: '🐟', price: 7.50, isWeight: false },
+    { name: 'Manzanas Rojas', icon: '🍎', pricePerKg: 3.00, isWeight: true },
+    { name: 'Plátanos Frescos', icon: '🍌', pricePerKg: 2.20, isWeight: true }
+  ];
+
+  const CUSTOMER_NAMES = ['Elena G.', 'Carlos M.', 'Lucía R.', 'Andrés V.', 'Marta S.', 'David K.'];
+  const CUSTOMER_AVATARS = ['👩', '👨', '👵', '👴', '👱‍♀️', '🧔', '🧑‍🎓'];
+
+  let score = 0;
+  let highScore = parseFloat(localStorage.getItem('cashier_deluxe_hi') || '0');
+  let lives = 3;
+  let day = 1;
+  let combo = 1;
+  let customersServedInDay = 0;
+
+  let currentSubtotal = 0;
+  let currentDiscount = 0;
+  let currentTotal = 0;
+  let paymentMethod = 'cash';
+  let cashPaid = 0;
+  let changeGiven = 0;
+  let changeBreakdown = [];
+  let posValue = '';
+  let isCardInserted = false;
+
+  let waitingForPayment = false;
+  let isPaused = false;
+  let patienceTimer = null;
+  let currentPatience = 100;
+  let pendingDamagedItem = null;
+  let activeWeighItem = null;
+
+  let upgrades = { coffee: false, laser: false };
+
+  // Sonidos con Web Audio API
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function playBeep(freq, type = 'sine', duration = 0.08, vol = 0.1) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  }
+
+  function soundScan() { playBeep(2100, 'square', 0.07, 0.12); }
+  function soundCoin() { playBeep(987, 'sine', 0.04, 0.08); }
+  function soundKey() { playBeep(1200, 'triangle', 0.03, 0.06); }
+  function soundCard() { playBeep(700, 'sawtooth', 0.08, 0.08); }
+  function soundError() { playBeep(140, 'sawtooth', 0.28, 0.2); }
+  function soundSuccess() {
+    playBeep(523.25, 'sine', 0.08);
+    setTimeout(() => playBeep(659.25, 'sine', 0.08), 70);
+    setTimeout(() => playBeep(783.99, 'sine', 0.12), 140);
+  }
+
+  // Partículas y Canvas
+  const canvas = document.getElementById('canvas-fx');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+
+  function resizeCanvas() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  function triggerConfetti(x, y) {
+    for (let i = 0; i < 30; i++) {
+      particles.push({
+        x: x || canvas.width / 2,
+        y: y || canvas.height / 2,
+        vx: (Math.random() - 0.5) * 8,
+        vy: (Math.random() - 0.7) * 9,
+        size: Math.random() * 6 + 3,
+        color: ['#10b981', '#38bdf8', '#facc15', '#f43f5e'][Math.floor(Math.random() * 4)],
+        alpha: 1
+      });
+    }
+  }
+
+  function renderParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.2;
+      p.alpha -= 0.02;
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.fillRect(p.x, p.y, p.size, p.size);
+      if (p.alpha <= 0) particles.splice(i, 1);
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(renderParticles);
+  }
+  renderParticles();
+
+  function showToast(text, color = '#facc15') {
+    const toast = document.createElement('div');
+    toast.className = 'toast-score';
+    toast.innerText = text;
+    toast.style.color = color;
+    toast.style.left = '50%';
+    toast.style.top = '45%';
+    document.getElementById('store-view').appendChild(toast);
+    setTimeout(() => toast.remove(), 900);
+  }
+
+  // Cambio de pestañas
+  function switchTab(type) {
+    paymentMethod = type;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.terminal-tab').forEach(t => t.classList.remove('active'));
+
+    if (type === 'cash') {
+      document.getElementById('tab-btn-cash').classList.add('active');
+      document.getElementById('tab-cash').classList.add('active');
+    } else {
+      document.getElementById('tab-btn-card').classList.add('active');
+      document.getElementById('tab-card').classList.add('active');
+    }
+  }
+
+  function startGame() {
+    document.getElementById('start-overlay').style.display = 'none';
+    document.getElementById('gameover-overlay').style.display = 'none';
+    document.getElementById('pause-overlay').style.display = 'none';
+    score = 0;
+    lives = 3;
+    combo = 1;
+    day = 1;
+    customersServedInDay = 0;
+    upgrades = { coffee: false, laser: false };
+    updateUI();
+    nextCustomer();
+  }
+
+  function togglePause() {
+    if (lives <= 0 || document.getElementById('start-overlay').style.display !== 'none') return;
+    isPaused = !isPaused;
+    document.getElementById('pause-overlay').style.display = isPaused ? 'flex' : 'none';
+    document.getElementById('pause-btn').innerText = isPaused ? '▶ Reanudar' : '⏸ Pausa';
+  }
+
+  function nextCustomer() {
+    clearInterval(patienceTimer);
+    waitingForPayment = false;
+    currentSubtotal = 0;
+    currentDiscount = 0;
+    currentTotal = 0;
+    cashPaid = 0;
+    changeGiven = 0;
+    changeBreakdown = [];
+    posValue = '';
+    isCardInserted = false;
+    activeWeighItem = null;
+
+    updatePosUI('● INSERTE MONTO', '$0.00');
+    resetCardGraphic();
+
+    document.getElementById('scale-display').innerText = '0.000 kg';
+    document.getElementById('bagged-count').innerText = '0';
+
+    const avatar = CUSTOMER_AVATARS[Math.floor(Math.random() * CUSTOMER_AVATARS.length)];
+    const name = CUSTOMER_NAMES[Math.floor(Math.random() * CUSTOMER_NAMES.length)];
+    paymentMethod = Math.random() > 0.45 ? 'card' : 'cash';
+    switchTab(paymentMethod);
+
+    document.getElementById('customer-avatar').innerText = avatar;
+    document.getElementById('customer-name').innerText = name + (paymentMethod === 'card' ? ' (Paga con Tarjeta 💳)' : ' (Paga en Efectivo 💵)');
+    document.getElementById('customer-state').innerText = 'Colocando artículos...';
+
+    const belt = document.getElementById('conveyor-belt');
+    belt.innerHTML = '';
+
+    const itemCount = Math.floor(Math.random() * 3) + 2;
+    for (let i = 0; i < itemCount; i++) {
+      const prod = PRODUCTS[Math.floor(Math.random() * PRODUCTS.length)];
+      createBeltItem(prod);
+    }
+
+    if (Math.random() < 0.25) {
+      createCouponItem();
+    }
+
+    updateScreens();
+
+    currentPatience = 100;
+    const patienceBar = document.getElementById('patience-bar');
+    patienceBar.style.width = '100%';
+    patienceBar.style.backgroundColor = '#10b981';
+
+    const decayRate = upgrades.coffee ? 0.38 : 0.55;
+    patienceTimer = setInterval(() => {
+      if (isPaused) return;
+      currentPatience -= decayRate;
+      patienceBar.style.width = Math.max(0, currentPatience) + '%';
+
+      if (currentPatience < 35) patienceBar.style.backgroundColor = '#ef4444';
+      else if (currentPatience < 65) patienceBar.style.backgroundColor = '#f59e0b';
+
+      if (currentPatience <= 0) {
+        clearInterval(patienceTimer);
+        customerAngry('¡El cliente se marchó enojado!');
+      }
+    }, 120);
+  }
+
+  function createBeltItem(prod) {
+    const belt = document.getElementById('conveyor-belt');
+    const el = document.createElement('div');
+    el.className = 'item';
+
+    const isDamaged = !prod.isWeight && Math.random() < 0.2;
+    const pluCode = Math.floor(1000 + Math.random() * 9000);
+
+    if (prod.isWeight) {
+      const weight = (Math.random() * 1.5 + 0.5).toFixed(3);
+      const calculatedPrice = (weight * prod.pricePerKg).toFixed(2);
+      el.innerHTML = `
+        <span class="item-tag" style="background:#0284c7;">Granel</span>
+        <div class="item-icon">${prod.icon}</div>
+        <div class="item-price">$${prod.pricePerKg}/kg</div>
+      `;
+      el.onclick = () => sendToScale(prod, weight, calculatedPrice, el);
+    } else {
+      el.innerHTML = `
+        ${isDamaged ? '<span class="item-tag">Código Dañado</span>' : ''}
+        <div class="item-icon">${prod.icon}</div>
+        <div class="item-price">$${prod.price.toFixed(2)}</div>
+      `;
+      el.onclick = () => {
+        if (isDamaged) {
+          triggerDamagedPLU(prod, pluCode, el);
+        } else {
+          scanProduct(prod.price, el);
+        }
+      };
+    }
+    belt.appendChild(el);
+  }
+
+  function createCouponItem() {
+    const belt = document.getElementById('conveyor-belt');
+    const el = document.createElement('div');
+    el.className = 'item';
+    el.style.borderColor = '#f59e0b';
+    el.innerHTML = `
+      <span class="item-tag" style="background:#f59e0b;">Cupón</span>
+      <div class="item-icon">🎟️</div>
+      <div class="item-price" style="color:#f59e0b;">-$1.50</div>
+    `;
+    el.onclick = () => {
+      soundScan();
+      currentDiscount += 1.50;
+      el.remove();
+      showToast('¡Cupón de -$1.50 aplicado!', '#f59e0b');
+      updateScreens();
+      checkRemainingItems();
+    };
+    belt.appendChild(el);
+  }
+
+  function sendToScale(prod, weight, finalPrice, element) {
+    activeWeighItem = { prod, weight, finalPrice: parseFloat(finalPrice), element };
+    document.getElementById('scale-display').innerText = `${weight} kg`;
+    showToast(`Pesando ${prod.name}...`, '#38bdf8');
+  }
+
+  function weighItem() {
+    if (!activeWeighItem) return;
+    soundScan();
+    scanProduct(activeWeighItem.finalPrice, activeWeighItem.element);
+    activeWeighItem = null;
+    document.getElementById('scale-display').innerText = '0.000 kg';
+  }
+
+  function triggerDamagedPLU(prod, code, el) {
+    soundError();
+    pendingDamagedItem = { prod, code, el };
+    document.getElementById('plu-required').innerText = code;
+    document.getElementById('plu-input').value = '';
+    document.getElementById('plu-modal').style.display = 'flex';
+    document.getElementById('plu-input').focus();
+  }
+
+  function validatePLU() {
+    const inputVal = document.getElementById('plu-input').value.trim();
+    if (pendingDamagedItem && inputVal === String(pendingDamagedItem.code)) {
+      document.getElementById('plu-modal').style.display = 'none';
+      scanProduct(pendingDamagedItem.prod.price, pendingDamagedItem.el);
+      pendingDamagedItem = null;
+    } else {
+      soundError();
+      showToast('Código PLU incorrecto', '#ef4444');
+    }
+  }
+
+  function scanProduct(price, element) {
+    if (waitingForPayment || isPaused) return;
+    soundScan();
+    currentSubtotal += price;
+    element.remove();
+
+    const bagCount = document.getElementById('bagged-count');
+    bagCount.innerText = parseInt(bagCount.innerText) + 1;
+
+    updateScreens();
+    checkRemainingItems();
+  }
+
+  function checkRemainingItems() {
+    const remaining = document.getElementById('conveyor-belt').children.length;
+    if (remaining === 0) promptCheckout();
+  }
+
+  function promptCheckout() {
+    waitingForPayment = true;
+    currentTotal = Math.max(0, currentSubtotal - currentDiscount);
+
+    if (paymentMethod === 'cash') {
+      const options = [5, 10, 20, 50, 100].filter(val => val >= currentTotal);
+      cashPaid = options[0] || (Math.ceil(currentTotal / 10) * 10);
+      document.getElementById('customer-state').innerText = `Pago en efectivo: $${cashPaid.toFixed(2)}. ¡Mi cambio!`;
+    } else {
+      cashPaid = currentTotal;
+      document.getElementById('customer-state').innerText = `Paga con tarjeta: $${currentTotal.toFixed(2)}`;
+      updatePosUI('💳 INSERTE MONTO Y CHIP', '$0.00');
+    }
+    updateScreens();
+  }
+
+  // Lógica de Efectivo
+  function giveCash(amount, label) {
+    if (!waitingForPayment || paymentMethod !== 'cash' || isPaused) return;
+    soundCoin();
+    changeGiven = Math.round((changeGiven + amount) * 100) / 100;
+    changeBreakdown.push(label);
+    updateScreens();
+  }
+
+  function clearChange() {
+    if (!waitingForPayment || isPaused) return;
+    changeGiven = 0;
+    changeBreakdown = [];
+    updateScreens();
+  }
+
+  function toggleUVCheck() {
+    soundScan();
+    showToast('Billetes legítimos verificados con UV', '#a855f7');
+  }
+
+  function submitCashChange() {
+    if (!waitingForPayment || paymentMethod !== 'cash' || isPaused) return;
+
+    const due = Math.round((cashPaid - currentTotal) * 100) / 100;
+    if (Math.abs(changeGiven - due) < 0.01) {
+      transactionSuccess();
+    } else {
+      customerAngry(`¡Vuelto incorrecto! Debías dar $${due.toFixed(2)} y diste $${changeGiven.toFixed(2)}.`);
+    }
+  }
+
+  // Lógica del Datáfono / POS Mejorado
+  function posInput(val) {
+    if (isPaused) return;
+    soundKey();
+    if (val === '.' && posValue.includes('.')) return;
+    if (posValue.length < 8) {
+      posValue += val;
+      updatePosUI(isCardInserted ? '● CHIP INSERTADO' : '● DIGITE MONTO', '$' + posValue);
+    }
+  }
+
+  function posBackspace() {
+    if (isPaused) return;
+    soundKey();
+    posValue = posValue.slice(0, -1);
+    updatePosUI(isCardInserted ? '● CHIP INSERTADO' : '● DIGITE MONTO', posValue ? '$' + posValue : '$0.00');
+  }
+
+  function posClear() {
+    if (isPaused) return;
+    soundKey();
+    posValue = '';
+    updatePosUI('● INSERTE MONTO', '$0.00');
+  }
+
+  function posAutoFill() {
+    if (!waitingForPayment || isPaused) return;
+    soundKey();
+    posValue = currentTotal.toFixed(2);
+    updatePosUI(isCardInserted ? '● CHIP INSERTADO' : '● MONTO CARGADO', '$' + posValue);
+  }
+
+  function insertCardGraphic() {
+    if (isPaused) return;
+    soundCard();
+    isCardInserted = !isCardInserted;
+    const cardEl = document.getElementById('visual-card');
+    const labelEl = document.getElementById('card-slot-label');
+
+    if (isCardInserted) {
+      cardEl.style.transform = 'translateX(-12px) scale(0.9)';
+      labelEl.innerText = '💳 Chip Conectado';
+      labelEl.style.color = '#34d399';
+      updatePosUI('✔ CHIP LEÍDO CORRECTAMENTE', posValue ? '$' + posValue : '$0.00');
+    } else {
+      resetCardGraphic();
+    }
+  }
+
+  function resetCardGraphic() {
+    isCardInserted = false;
+    const cardEl = document.getElementById('visual-card');
+    const labelEl = document.getElementById('card-slot-label');
+    cardEl.style.transform = 'none';
+    labelEl.innerText = '💳 Tarjeta Lista';
+    labelEl.style.color = '#f8fafc';
+  }
+
+  function updatePosUI(statusText, amountText) {
+    document.getElementById('pos-status').innerHTML = `<span>●</span> ${statusText}`;
+    document.getElementById('pos-display').innerText = amountText;
+  }
+
+  function submitCardPayment() {
+    if (!waitingForPayment || paymentMethod !== 'card' || isPaused) return;
+
+    const entered = parseFloat(posValue);
+    if (isNaN(entered)) {
+      soundError();
+      updatePosUI('⚠ INGRESE MONTO VÁLIDO', '$0.00');
+      return;
+    }
+
+    if (Math.abs(entered - currentTotal) < 0.02) {
+      updatePosUI('✔ APROBADO - CONECTANDO...', '$' + entered.toFixed(2));
+      setTimeout(() => transactionSuccess(), 400);
+    } else {
+      soundError();
+      customerAngry(`¡Cobro fallido! Debías cobrar $${currentTotal.toFixed(2)} y marcaste $${entered.toFixed(2)}.`);
+    }
+  }
+
+  function transactionSuccess() {
+    soundSuccess();
+    triggerConfetti();
+
+    const speedBonus = Math.floor(currentPatience * 0.4);
+    const earned = currentTotal + (speedBonus * 0.1 * combo);
+    score = Math.round((score + earned) * 100) / 100;
+
+    showToast(`+${earned.toFixed(2)}$ Cobrados!`, '#10b981');
+
+    if (combo < 4) combo++;
+    customersServedInDay++;
+
+    if (score > highScore) {
+      highScore = score;
+      localStorage.setItem('cashier_deluxe_hi', highScore);
+    }
+
+    updateUI();
+
+    if (customersServedInDay >= 5) {
+      endWorkDay();
+    } else {
+      nextCustomer();
+    }
+  }
+
+  function customerAngry(reason) {
+    soundError();
+    lives--;
+    combo = 1;
+    showToast('¡Error de Servicio!', '#ef4444');
+    document.getElementById('customer-state').innerText = reason;
+    updateUI();
+
+    setTimeout(() => {
+      if (lives <= 0) {
+        gameOver();
+      } else {
+        nextCustomer();
+      }
+    }, 1200);
+  }
+
+  function endWorkDay() {
+    clearInterval(patienceTimer);
+    day++;
+    customersServedInDay = 0;
+    showToast(`¡Día completado! Iniciando Día ${day}`, '#38bdf8');
+    setTimeout(() => nextCustomer(), 1500);
+  }
+
+  function updateScreens() {
+    document.getElementById('screen-subtotal').innerText = `$${currentSubtotal.toFixed(2)}`;
+    document.getElementById('screen-discount').innerText = `-$${currentDiscount.toFixed(2)}`;
+    const finalVal = Math.max(0, currentSubtotal - currentDiscount);
+    document.getElementById('screen-total').innerText = `$${finalVal.toFixed(2)}`;
+    document.getElementById('screen-paid').innerText = `$${cashPaid.toFixed(2)}`;
+
+    const due = waitingForPayment && paymentMethod === 'cash' ? Math.max(0, cashPaid - finalVal) : 0;
+    document.getElementById('screen-due').innerText = `$${due.toFixed(2)}`;
+    document.getElementById('screen-given').innerText = `$${changeGiven.toFixed(2)}`;
+
+    const breakdownEl = document.getElementById('change-breakdown');
+    breakdownEl.innerText = changeBreakdown.length > 0
+      ? 'Desglose: ' + changeBreakdown.join(' + ')
+      : 'Desglose: Ninguno';
+  }
+
+  function updateUI() {
+    document.getElementById('score').innerText = score.toFixed(2);
+    document.getElementById('high-score').innerText = highScore.toFixed(2);
+    document.getElementById('lives').innerText = '❤️'.repeat(Math.max(0, lives));
+    document.getElementById('combo-display').innerText = `Combo: x${combo}`;
+    document.getElementById('day-display').innerText = `Día ${day}`;
+  }
+
+  function gameOver() {
+    clearInterval(patienceTimer);
+    document.getElementById('final-score').innerText = `$${score.toFixed(2)}`;
+    document.getElementById('gameover-overlay').style.display = 'flex';
+  }
+
+  function openShop() {
+    isPaused = true;
+    document.getElementById('shop-overlay').style.display = 'flex';
+  }
+
+  function closeShop() {
+    isPaused = false;
+    document.getElementById('shop-overlay').style.display = 'none';
+  }
+
+  function buyUpgrade(type, cost) {
+    if (score >= cost && !upgrades[type]) {
+      score -= cost;
+      upgrades[type] = true;
+      updateUI();
+      soundSuccess();
+      const btn = document.getElementById(`buy-${type}-btn`);
+      btn.innerText = 'Comprado ✓';
+      btn.disabled = true;
+      btn.style.background = '#475569';
+    } else {
+      soundError();
+    }
+  }
+
+  // Atajos de teclado universales
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'p' || e.key === 'P') {
+      togglePause();
+      return;
+    }
+    if (isPaused) return;
+
+    if (waitingForPayment && paymentMethod === 'card') {
+      if ((e.key >= '0' && e.key <= '9') || e.key === '.') {
+        posInput(e.key);
+      } else if (e.key === 'Backspace') {
+        posBackspace();
+      } else if (e.key === 'Enter') {
+        submitCardPayment();
+      }
+    } else if (waitingForPayment && paymentMethod === 'cash') {
+      if (e.key === '1') giveCash(50, '$50');
+      else if (e.key === '2') giveCash(20, '$20');
+      else if (e.key === '3') giveCash(10, '$10');
+      else if (e.key === '4') giveCash(5, '$5');
+      else if (e.key === '5') giveCash(1, '$1');
+      else if (e.key === 'Backspace') clearChange();
+      else if (e.key === 'Enter') submitCashChange();
+    }
+  });
+
+  document.getElementById('high-score').innerText = highScore.toFixed(2);
+</script>
+
+</body>
+</html>

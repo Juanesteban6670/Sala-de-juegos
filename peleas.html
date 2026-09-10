@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Street Brawl 2D - Kick Knockback Edition</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+  }
+  body {
+    background: #07080c;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  #game-container {
+    position: relative;
+    box-shadow: 0 0 50px rgba(0,0,0,0.9);
+    border: 3px solid #2c3e50;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  canvas {
+    display: block;
+    background: #000;
+  }
+
+  /* HUD Superior */
+  .hud {
+    position: absolute;
+    top: 12px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: none;
+  }
+  .fighter-hud {
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+  }
+  .hud-p2 {
+    align-items: flex-end;
+  }
+  .name {
+    font-size: 15px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    text-shadow: 1px 1px 3px #000;
+  }
+  .bar-container {
+    width: 100%;
+    height: 20px;
+    background: rgba(10, 10, 15, 0.85);
+    border: 2px solid #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.7);
+  }
+  .health-bar {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #00b894, #55efc4);
+    transition: width 0.1s ease-out;
+  }
+  .hud-p2 .health-bar {
+    background: linear-gradient(to left, #d63031, #ff7675);
+  }
+
+  /* Barra de Energía (Super) */
+  .energy-container {
+    width: 100%;
+    height: 10px;
+    background: #111;
+    border: 1px solid #7f8c8d;
+    border-radius: 3px;
+    margin-top: 4px;
+    overflow: hidden;
+  }
+  .energy-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(to right, #0984e3, #00cec9);
+    transition: width 0.15s ease;
+  }
+  .energy-label {
+    font-size: 11px;
+    color: #00cec9;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  .center-hud {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    pointer-events: auto;
+  }
+  .round-info {
+    font-size: 22px;
+    font-weight: 900;
+    color: #f1c40f;
+    text-shadow: 0 0 8px rgba(241, 196, 15, 0.6);
+  }
+  .btn-pause {
+    background: rgba(44, 62, 80, 0.85);
+    border: 1px solid #7f8c8d;
+    color: #fff;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .btn-pause:hover {
+    background: #e74c3c;
+    border-color: #e74c3c;
+  }
+
+  /* Combo Flotante */
+  #combo-text {
+    position: absolute;
+    top: 75px;
+    left: 25px;
+    font-size: 26px;
+    font-weight: 900;
+    font-style: italic;
+    color: #ff9f43;
+    text-shadow: 2px 2px 0 #000, 0 0 10px rgba(255, 159, 67, 0.6);
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+  }
+
+  /* Modales */
+  .modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 7, 15, 0.9);
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    z-index: 10;
+  }
+  .modal-overlay h1 {
+    font-size: 46px;
+    font-weight: 900;
+    color: #e74c3c;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+    text-shadow: 0 0 20px rgba(231, 76, 60, 0.8), 3px 3px 0 #2c3e50;
+  }
+  .modal-overlay h2 {
+    font-size: 34px;
+    color: #f1c40f;
+    margin-bottom: 8px;
+    text-shadow: 0 0 15px rgba(241, 196, 15, 0.7);
+  }
+  .modal-overlay p {
+    font-size: 14px;
+    color: #bdc3c7;
+    margin-bottom: 18px;
+    max-width: 500px;
+    line-height: 1.4;
+  }
+
+  button.main-btn {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    border: none;
+    color: white;
+    padding: 10px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+    transition: all 0.2s ease;
+    margin: 4px;
+  }
+  button.main-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.7);
+  }
+
+  /* Selector de Personajes */
+  .roster-container {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .char-card {
+    background: rgba(20, 24, 35, 0.9);
+    border: 2px solid #34495e;
+    border-radius: 8px;
+    padding: 14px 16px;
+    width: 170px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .char-card:hover {
+    transform: translateY(-4px);
+    border-color: #f1c40f;
+  }
+  .char-card.selected {
+    border-color: #00cec9;
+    box-shadow: 0 0 18px rgba(0, 206, 201, 0.5);
+    background: rgba(26, 36, 52, 0.95);
+  }
+  .char-preview {
+    width: 40px;
+    height: 70px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+  }
+  .char-name {
+    font-weight: 800;
+    font-size: 15px;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .char-role {
+    font-size: 11px;
+    font-weight: 700;
+    color: #f1c40f;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .char-stats {
+    font-size: 11px;
+    color: #bdc3c7;
+    width: 100%;
+    text-align: left;
+    line-height: 1.5;
+  }
+
+  .controls-panel {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #888;
+    text-align: center;
+    line-height: 1.6;
+  }
+  .controls-panel b {
+    color: #eee;
+  }
+  .super-hint {
+    color: #00cec9 !important;
+  }
+  .kick-hint {
+    color: #ff9f43 !important;
+  }
+</style>
+</head>
+<body>
+
+<div id="game-container">
+  <div class="hud" id="hud" style="display: none;">
+    <!-- Jugador P1 -->
+    <div class="fighter-hud">
+      <span class="name" id="p1-name-hud">Jugador</span>
+      <div class="bar-container">
+        <div id="p1-health" class="health-bar"></div>
+      </div>
+      <div class="energy-container">
+        <div id="p1-energy" class="energy-bar"></div>
+      </div>
+      <span class="energy-label" id="p1-energy-label">SUPER: 0%</span>
+    </div>
+    
+    <!-- Centro -->
+    <div class="center-hud">
+      <div class="round-info" id="level-title">NIVEL 1</div>
+      <button class="btn-pause" id="btnPause" onclick="togglePause()">Pausa [P]</button>
+    </div>
+
+    <!-- IA P2 -->
+    <div class="fighter-hud hud-p2">
+      <span class="name" id="p2-name">Rival Novato</span>
+      <div class="bar-container">
+        <div id="p2-health" class="health-bar"></div>
+      </div>
+      <div class="energy-container">
+        <div id="p2-energy" class="energy-bar"></div>
+      </div>
+      <span class="energy-label" id="p2-energy-label">SUPER: 0%</span>
+    </div>
+  </div>
+
+  <div id="combo-text">COMBO x2!</div>
+
+  <canvas id="gameCanvas" width="900" height="450"></canvas>
+
+  <!-- Menú de Inicio -->
+  <div id="start-screen" class="modal-overlay">
+    <h1>STREET BRAWL 2D</h1>
+    <p>Derrota a los 5 contrincantes urbanos en combates 1 contra 1. Elige tu estilo de pelea antes de entrar a la arena.</p>
+    <button class="main-btn" onclick="openCharacterSelect()">Elegir Personaje</button>
+  </div>
+
+  <!-- Menú de Selección de Personajes -->
+  <div id="select-screen" class="modal-overlay" style="display: none;">
+    <h2>SELECCIONA TU LUCHADOR</h2>
+    <p>Cada peleador tiene diferentes valores de salud, agilidad y pegada.</p>
+    
+    <div class="roster-container">
+      <div class="char-card selected" id="card-striker" onclick="selectCharacter('striker')">
+        <div class="char-preview" style="background: #3498db;"></div>
+        <div class="char-name">RYUZO</div>
+        <div class="char-role">Striker</div>
+        <div class="char-stats">
+          ❤ Vida: 100<br>
+          ⚡ Velocidad: Media<br>
+          🥊 Daño: Balanceado
+        </div>
+      </div>
+
+      <div class="char-card" id="card-ninja" onclick="selectCharacter('ninja')">
+        <div class="char-preview" style="background: #2ecc71;"></div>
+        <div class="char-name">KAGE</div>
+        <div class="char-role">Ninja</div>
+        <div class="char-stats">
+          ❤ Vida: 85<br>
+          ⚡ Velocidad: Muy Alta<br>
+          🥊 Daño: Ligero/Rápido
+        </div>
+      </div>
+
+      <div class="char-card" id="card-brawler" onclick="selectCharacter('brawler')">
+        <div class="char-preview" style="background: #e67e22;"></div>
+        <div class="char-name">TITUS</div>
+        <div class="char-role">Bruto</div>
+        <div class="char-stats">
+          ❤ Vida: 135<br>
+          ⚡ Velocidad: Pesada<br>
+          🥊 Daño: Devastador
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <button class="main-btn" onclick="confirmCharacterAndStart()">¡Pelear Ahora!</button>
+    </div>
+  </div>
+
+  <!-- Menú de Pausa -->
+  <div id="pause-screen" class="modal-overlay" style="display: none;">
+    <h2>PAUSA</h2>
+    <p>Tómate un respiro antes de continuar el combate.</p>
+    <button class="main-btn" onclick="togglePause()">Reanudar</button>
+    <button class="main-btn" style="background: #57606f;" onclick="quitToCharacterSelect()">Cambiar Personaje</button>
+  </div>
+
+  <!-- Ventana de Fin de Ronda -->
+  <div id="round-screen" class="modal-overlay" style="display: none;">
+    <h2 id="msg-title">¡VICTORIA!</h2>
+    <p id="msg-desc">Has derrotado al rival de este distrito.</p>
+    <button class="main-btn" id="msg-btn" onclick="nextLevelOrRestart()">Siguiente Nivel</button>
+    <button class="main-btn" style="background: #57606f;" onclick="quitToCharacterSelect()">Cambiar Personaje</button>
+  </div>
+</div>
+
+<div class="controls-panel">
+  <b>Movimiento:</b> [A] Izq | [D] Der | [W] Saltar | [S] Bloquear &nbsp;|&nbsp; 
+  <b>Ataques:</b> [J] Puñetazo | <b class="kick-hint">[K] Patada (Empuje)</b> | <b class="super-hint">[L] Super Ataque</b> &nbsp;|&nbsp; 
+  <b>Sistema:</b> [P] / [Esc] Pausa
+</div>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+const GRAVITY = 0.65;
+const GROUND_Y = 370;
+
+let gameState = 'START';
+let currentLevel = 1;
+const MAX_LEVELS = 5;
+
+// ==========================================
+// DEFINICIÓN DE PERSONAJES JUGABLES
+// ==========================================
+const playableCharacters = {
+  striker: {
+    id: 'striker',
+    name: "Ryuzo",
+    color: "#3498db",
+    maxHp: 100,
+    speed: 4.2,
+    jumpForce: -14,
+    punchDmg: 8,
+    kickDmg: 14
+  },
+  ninja: {
+    id: 'ninja',
+    name: "Kage",
+    color: "#2ecc71",
+    maxHp: 85,
+    speed: 5.3,
+    jumpForce: -15.2,
+    punchDmg: 6,
+    kickDmg: 11
+  },
+  brawler: {
+    id: 'brawler',
+    name: "Titus",
+    color: "#e67e22",
+    maxHp: 135,
+    speed: 3.3,
+    jumpForce: -13,
+    punchDmg: 12,
+    kickDmg: 19
+  }
+};
+
+let selectedCharKey = 'striker';
+
+// ==========================================
+// AUDIO (WEB AUDIO API)
+// ==========================================
+let audioCtx = null;
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+}
+
+function playSound(type) {
+  if (!audioCtx) return;
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  if (type === 'punch') {
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(140, now);
+    osc.frequency.exponentialRampToValueAtTime(40, now + 0.1);
+    gain.gain.setValueAtTime(0.35, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+    osc.start(now);
+    osc.stop(now + 0.1);
+  } else if (type === 'kick') {
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(180, now);
+    osc.frequency.exponentialRampToValueAtTime(30, now + 0.16);
+    gain.gain.setValueAtTime(0.45, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
+    osc.start(now);
+    osc.stop(now + 0.16);
+  } else if (type === 'block') {
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(100, now);
+    osc.frequency.exponentialRampToValueAtTime(80, now + 0.08);
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+    osc.start(now);
+    osc.stop(now + 0.08);
+  } else if (type === 'fireball') {
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(450, now);
+    osc.frequency.exponentialRampToValueAtTime(120, now + 0.3);
+    gain.gain.setValueAtTime(0.4, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+    osc.start(now);
+    osc.stop(now + 0.3);
+  } else if (type === 'jump') {
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(150, now);
+    osc.frequency.exponentialRampToValueAtTime(320, now + 0.12);
+    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+    osc.start(now);
+    osc.stop(now + 0.12);
+  } else if (type === 'win') {
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(260, now);
+    osc.frequency.setValueAtTime(330, now + 0.12);
+    osc.frequency.setValueAtTime(520, now + 0.24);
+    gain.gain.setValueAtTime(0.3, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+    osc.start(now);
+    osc.stop(now + 0.5);
+  }
+}
+
+// ==========================================
+// SCREEN SHAKE & COMBOS
+// ==========================================
+let screenShake = 0;
+function triggerShake(magnitude) {
+  screenShake = magnitude;
+}
+
+let floatingTexts = [];
+function addDamageText(x, y, text, color) {
+  floatingTexts.push({
+    x: x + (Math.random() - 0.5) * 15,
+    y: y,
+    text: text,
+    color: color || '#fff',
+    vy: -2,
+    life: 28
+  });
+}
+
+let comboCount = 0;
+let comboTimer = 0;
+function registerComboHit() {
+  comboCount++;
+  comboTimer = 70;
+  const comboEl = document.getElementById('combo-text');
+  if (comboCount > 1) {
+    comboEl.innerText = `COMBO x${comboCount}!`;
+    comboEl.style.opacity = '1';
+    comboEl.style.transform = 'scale(1.2)';
+    setTimeout(() => { comboEl.style.transform = 'scale(1)'; }, 100);
+  }
+}
+
+// ==========================================
+// PROYECTILES
+// ==========================================
+let projectiles = [];
+class Projectile {
+  constructor({ x, y, vx, owner, color = '#00cec9' }) {
+    this.x = x;
+    this.y = y;
+    this.radius = 14;
+    this.vx = vx;
+    this.owner = owner;
+    this.damage = 25;
+    this.active = true;
+    this.color = color;
+  }
+
+  update() {
+    this.x += this.vx;
+    const opp = this.owner.isAI ? player : enemy;
+
+    if (
+      this.x + this.radius > opp.x &&
+      this.x - this.radius < opp.x + opp.width &&
+      this.y + this.radius > opp.y &&
+      this.y - this.radius < opp.y + opp.height
+    ) {
+      opp.receiveDamage(this.damage, this.vx > 0 ? 1 : -1, 'super');
+      addHitEffect(this.x, this.y, this.color);
+      triggerShake(10);
+      this.active = false;
+    }
+
+    if (this.x < 0 || this.x > canvas.width) {
+      this.active = false;
+    }
+  }
+
+  draw() {
+    ctx.save();
+    ctx.shadowColor = this.color;
+    ctx.shadowBlur = 15;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius * 0.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+// Configuración de Rivales por Nivel
+const levelConfigs = [
+  { name: "Sombra Novata",      color: "#7f8c8d", maxHp: 100, speed: 2.5, aggressive: 0.02, reaction: 0.02, punchDmg: 7,  kickDmg: 12 },
+  { name: "Luchador Callejero", color: "#d35400", maxHp: 130, speed: 3.2, aggressive: 0.035, reaction: 0.035, punchDmg: 9, kickDmg: 15 },
+  { name: "Cinturón Negro",     color: "#8e44ad", maxHp: 160, speed: 3.8, aggressive: 0.05, reaction: 0.05, punchDmg: 11, kickDmg: 18 },
+  { name: "Maestro Ciborg",     color: "#2980b9", maxHp: 190, speed: 4.4, aggressive: 0.065, reaction: 0.07, punchDmg: 13, kickDmg: 20 },
+  { name: "Titán del Caos",     color: "#c0392b", maxHp: 240, speed: 5.0, aggressive: 0.08, reaction: 0.09, punchDmg: 15, kickDmg: 24 }
+];
+
+// Escenario
+const stars = [];
+for (let i = 0; i < 45; i++) {
+  stars.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * (GROUND_Y - 140),
+    radius: Math.random() * 1.5 + 0.5,
+    twinkle: Math.random() * Math.PI * 2
+  });
+}
+
+const buildings = [
+  { x: 15,  w: 110, h: 220 },
+  { x: 135, w: 90,  h: 270 },
+  { x: 235, w: 130, h: 200 },
+  { x: 380, w: 100, h: 285 },
+  { x: 495, w: 125, h: 230 },
+  { x: 635, w: 115, h: 300 },
+  { x: 765, w: 120, h: 210 }
+];
+
+buildings.forEach(b => {
+  b.windows = [];
+  const rows = Math.floor(b.h / 24);
+  const cols = Math.floor(b.w / 18);
+  for (let r = 2; r < rows - 1; r++) {
+    for (let c = 1; c < cols - 1; c++) {
+      if (Math.random() > 0.4) {
+        b.windows.push({
+          x: b.x + c * 18,
+          y: (GROUND_Y - b.h) + r * 22,
+          lit: Math.random() > 0.35,
+          color: Math.random() > 0.3 ? '#f1c40f' : '#3498db'
+        });
+      }
+    }
+  }
+});
+
+let hitParticles = [];
+function addHitEffect(x, y, color) {
+  for (let i = 0; i < 12; i++) {
+    hitParticles.push({
+      x: x,
+      y: y,
+      vx: (Math.random() - 0.5) * 8,
+      vy: (Math.random() - 0.5) * 8,
+      life: 18,
+      color: color || '#f39c12'
+    });
+  }
+}
+
+// ==========================================
+// CLASE LUCHADOR
+// ==========================================
+class Fighter {
+  constructor({x, y, color, isAI = false}) {
+    this.x = x;
+    this.y = y;
+    this.width = 46;
+    this.height = 100;
+    this.color = color;
+    this.vx = 0;
+    this.vy = 0;
+    this.isAI = isAI;
+
+    this.maxHealth = 100;
+    this.health = 100;
+    this.energy = 0;
+    this.facing = isAI ? -1 : 1;
+
+    this.isGrounded = false;
+    this.isBlocking = false;
+    this.isAttacking = false;
+    this.attackType = null;
+    this.attackFrame = 0;
+    this.attackCooldown = 0;
+    this.hitCooldown = 0;
+
+    this.speed = 4.2;
+    this.jumpForce = -14;
+    this.punchDamage = 8;
+    this.kickDamage = 14;
+  }
+
+  draw() {
+    ctx.save();
+
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.beginPath();
+    ctx.ellipse(this.x + this.width / 2, GROUND_Y, this.width / 1.4, 7, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    if (this.hitCooldown > 0 && Math.floor(this.hitCooldown / 2) % 2 === 0) {
+      ctx.globalAlpha = 0.4;
+    }
+
+    if (this.energy >= 100) {
+      ctx.shadowColor = this.color;
+      ctx.shadowBlur = 14;
+    }
+
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+
+    ctx.fillStyle = '#111';
+    ctx.fillRect(this.x, this.y + 48, this.width, 8);
+
+    ctx.fillStyle = '#f5cd79';
+    ctx.beginPath();
+    ctx.arc(this.x + this.width / 2, this.y - 12, 16, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x + (this.facing === 1 ? 16 : 6), this.y - 18, 18, 6);
+
+    ctx.fillStyle = '#000';
+    let eyeX = this.facing === 1 ? this.x + 28 : this.x + 12;
+    ctx.fillRect(eyeX, this.y - 16, 4, 4);
+
+    if (this.isBlocking) {
+      ctx.strokeStyle = '#00d2d3';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      let shieldX = this.facing === 1 ? this.x + this.width + 4 : this.x - 4;
+      ctx.arc(shieldX, this.y + 40, 28, -Math.PI / 2, Math.PI / 2, this.facing !== 1);
+      ctx.stroke();
+    }
+
+    if (this.isAttacking) {
+      ctx.fillStyle = '#e67e22';
+      if (this.attackType === 'punch') {
+        let punchX = this.facing === 1 ? this.x + this.width : this.x - 30;
+        ctx.fillRect(punchX, this.y + 24, 30, 14);
+      } else if (this.attackType === 'kick') {
+        let kickX = this.facing === 1 ? this.x + this.width : this.x - 40;
+        ctx.fillRect(kickX, this.y + 54, 40, 16);
+      }
+    }
+
+    ctx.restore();
+  }
+
+  update(opponent) {
+    if (!this.isAttacking) {
+      this.facing = this.x < opponent.x ? 1 : -1;
+    }
+
+    this.x += this.vx;
+    this.y += this.vy;
+
+    // Fricción en el suelo para frenar el empuje suavemente
+    if (this.isGrounded && this.hitCooldown > 0) {
+      this.vx *= 0.85;
+    }
+
+    if (this.y + this.height < GROUND_Y) {
+      this.vy += GRAVITY;
+      this.isGrounded = false;
+    } else {
+      this.y = GROUND_Y - this.height;
+      this.vy = 0;
+      this.isGrounded = true;
+    }
+
+    if (this.x < 15) this.x = 15;
+    if (this.x + this.width > canvas.width - 15) this.x = canvas.width - this.width - 15;
+
+    if (this.attackCooldown > 0) this.attackCooldown--;
+    if (this.hitCooldown > 0) this.hitCooldown--;
+
+    if (this.isAttacking) {
+      this.attackFrame--;
+      if (this.attackFrame <= 0) {
+        this.isAttacking = false;
+        this.attackType = null;
+      }
+    }
+  }
+
+  attack(type) {
+    if (this.isAttacking || this.attackCooldown > 0 || this.isBlocking) return;
+
+    this.isAttacking = true;
+    this.attackType = type;
+    this.attackFrame = 12;
+    this.attackCooldown = type === 'punch' ? 20 : 30;
+
+    const reach = type === 'punch' ? 36 : 46;
+    const attackX = this.facing === 1 ? this.x + this.width : this.x - reach;
+    const attackY = type === 'punch' ? this.y + 20 : this.y + 50;
+    const opp = this.isAI ? player : enemy;
+
+    if (
+      attackX + reach >= opp.x &&
+      attackX <= opp.x + opp.width &&
+      attackY + 25 >= opp.y &&
+      attackY <= opp.y + opp.height
+    ) {
+      const dmg = type === 'punch' ? this.punchDamage : this.kickDamage;
+      opp.receiveDamage(dmg, this.facing, type);
+      addHitEffect(opp.x + opp.width / 2, attackY + 10, type === 'punch' ? '#f1c40f' : '#ff4757');
+      triggerShake(type === 'punch' ? 4 : 7);
+
+      this.gainEnergy(14);
+      if (!this.isAI) registerComboHit();
+    }
+
+    playSound(type);
+  }
+
+  superAttack() {
+    if (this.energy < 100 || this.isAttacking || this.isBlocking) return;
+
+    this.energy = 0;
+    updateBars();
+    playSound('fireball');
+    triggerShake(8);
+
+    const pX = this.facing === 1 ? this.x + this.width + 15 : this.x - 15;
+    projectiles.push(new Projectile({
+      x: pX,
+      y: this.y + 40,
+      vx: this.facing * 8.5,
+      owner: this,
+      color: this.color
+    }));
+  }
+
+  gainEnergy(amount) {
+    this.energy = Math.min(100, this.energy + amount);
+    updateBars();
+  }
+
+  receiveDamage(amount, fromDirection, attackType = 'punch') {
+    let actualDamage = amount;
+    const isSuper = (attackType === 'super');
+    const isKick = (attackType === 'kick');
+
+    if (this.isBlocking && !isSuper) {
+      actualDamage = Math.max(1, Math.floor(amount * 0.2));
+      // Si bloquea una patada, se empuja ligeramente menos
+      if (isKick) {
+        this.vx = fromDirection * 4;
+        this.hitCooldown = 10;
+      } else {
+        this.vx = 0; // Puñetazo bloqueado no empuja
+      }
+      playSound('block');
+      addDamageText(this.x + this.width / 2, this.y + 10, `-${actualDamage}`, '#3498db');
+    } else {
+      this.hitCooldown = 15;
+      
+      // EMPUJE: Solo con patadas (o el impacto del Super)
+      if (isKick) {
+        this.vx = fromDirection * 9.5;  // Empuje horizontal marcado hacia atrás
+        this.vy = -3.5;                 // Pequeño alzamiento para efecto de impacto
+        this.isGrounded = false;
+      } else if (isSuper) {
+        this.vx = fromDirection * 8;
+      } else {
+        this.vx = 0; // Puñetazos normales no empujan
+      }
+
+      const color = isSuper ? '#00cec9' : (amount > 10 ? '#e67e22' : '#f1c40f');
+      addDamageText(this.x + this.width / 2, this.y + 10, `-${actualDamage}`, color);
+    }
+
+    this.health = Math.max(0, this.health - actualDamage);
+    this.gainEnergy(Math.floor(actualDamage * 0.6));
+    updateBars();
+
+    if (this.health <= 0 && gameState === 'PLAYING') {
+      endRound(this.isAI ? 'player' : 'enemy');
+    }
+  }
+}
+
+// Instancias globales
+let player = new Fighter({x: 180, y: 200, color: '#3498db'});
+let enemy = new Fighter({x: 680, y: 200, color: '#e74c3c', isAI: true});
+
+// Entradas de teclado
+const keys = { a: false, d: false, w: false, s: false };
+
+window.addEventListener('keydown', (e) => {
+  initAudio();
+  const key = e.key.toLowerCase();
+
+  if (key === 'p' || key === 'escape') {
+    if (gameState === 'PLAYING' || gameState === 'PAUSED') {
+      togglePause();
+      return;
+    }
+  }
+
+  if (gameState !== 'PLAYING') return;
+
+  if (key === 'a') keys.a = true;
+  if (key === 'd') keys.d = true;
+  if (key === 'w' && player.isGrounded && !player.isBlocking) {
+    player.vy = player.jumpForce;
+    playSound('jump');
+  }
+  if (key === 's') keys.s = true;
+
+  if (key === 'j') player.attack('punch');
+  if (key === 'k') player.attack('kick');
+  if (key === 'l') player.superAttack();
+});
+
+window.addEventListener('keyup', (e) => {
+  const key = e.key.toLowerCase();
+  if (key === 'a') keys.a = false;
+  if (key === 'd') keys.d = false;
+  if (key === 's') keys.s = false;
+});
+
+// IA
+function updateAI(ai, target, config) {
+  const dist = Math.abs(ai.x - target.x);
+
+  if (ai.energy >= 100 && Math.random() < 0.05) {
+    ai.superAttack();
+    return;
+  }
+
+  if (target.isAttacking && Math.random() < config.reaction && dist < 75) {
+    ai.isBlocking = true;
+  } else {
+    ai.isBlocking = false;
+  }
+
+  // Si está recibiendo empuje, respetar la inercia
+  if (ai.hitCooldown > 0) return;
+
+  if (ai.isBlocking) {
+    ai.vx = 0;
+    return;
+  }
+
+  if (dist > 65) {
+    ai.vx = ai.facing * config.speed;
+  } else if (dist < 40) {
+    ai.vx = -ai.facing * (config.speed * 0.7);
+  } else {
+    ai.vx = 0;
+  }
+
+  if (Math.random() < 0.015 && ai.isGrounded) {
+    ai.vy = ai.jumpForce;
+  }
+
+  if (dist <= 75 && Math.random() < config.aggressive) {
+    if (Math.random() > 0.45) {
+      ai.attack('punch');
+    } else {
+      ai.attack('kick');
+    }
+  }
+}
+
+// Carga y configuración de personajes
+function applyPlayerStats() {
+  const char = playableCharacters[selectedCharKey];
+  player.color = char.color;
+  player.maxHealth = char.maxHp;
+  player.health = char.maxHp;
+  player.speed = char.speed;
+  player.jumpForce = char.jumpForce;
+  player.punchDamage = char.punchDmg;
+  player.kickDamage = char.kickDmg;
+
+  document.getElementById('p1-name-hud').innerText = `${char.name} (Tú)`;
+}
+
+function loadLevel(lvl) {
+  const cfg = levelConfigs[lvl - 1];
+
+  player.x = 200;
+  player.y = 200;
+  player.energy = 0;
+  player.vx = 0;
+  player.vy = 0;
+  player.isBlocking = false;
+  applyPlayerStats();
+
+  enemy = new Fighter({x: 650, y: 200, color: cfg.color, isAI: true});
+  enemy.maxHealth = cfg.maxHp;
+  enemy.health = cfg.maxHp;
+  enemy.energy = 0;
+  enemy.speed = cfg.speed;
+  enemy.punchDamage = cfg.punchDmg;
+  enemy.kickDamage = cfg.kickDmg;
+
+  projectiles = [];
+  floatingTexts = [];
+  hitParticles = [];
+  comboCount = 0;
+  comboTimer = 0;
+  document.getElementById('combo-text').style.opacity = '0';
+
+  document.getElementById('level-title').innerText = `NIVEL ${lvl}`;
+  document.getElementById('p2-name').innerText = cfg.name;
+  updateBars();
+
+  document.getElementById('round-screen').style.display = 'none';
+  gameState = 'PLAYING';
+}
+
+function updateBars() {
+  const p1HpPct = Math.max(0, (player.health / player.maxHealth) * 100);
+  const p2HpPct = Math.max(0, (enemy.health / enemy.maxHealth) * 100);
+
+  document.getElementById('p1-health').style.width = p1HpPct + '%';
+  document.getElementById('p2-health').style.width = p2HpPct + '%';
+
+  document.getElementById('p1-energy').style.width = player.energy + '%';
+  document.getElementById('p2-energy').style.width = enemy.energy + '%';
+
+  document.getElementById('p1-energy-label').innerText = player.energy >= 100 ? '¡SUPER LISTO [L]!' : `SUPER: ${Math.floor(player.energy)}%`;
+  document.getElementById('p2-energy-label').innerText = enemy.energy >= 100 ? '¡SUPER LISTO!' : `SUPER: ${Math.floor(enemy.energy)}%`;
+}
+
+// ==========================================
+// CONTROL DE MENÚS Y SELECTOR
+// ==========================================
+function openCharacterSelect() {
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('select-screen').style.display = 'flex';
+}
+
+function selectCharacter(key) {
+  selectedCharKey = key;
+  document.querySelectorAll('.char-card').forEach(card => card.classList.remove('selected'));
+  document.getElementById(`card-${key}`).classList.add('selected');
+}
+
+function confirmCharacterAndStart() {
+  document.getElementById('select-screen').style.display = 'none';
+  document.getElementById('hud').style.display = 'flex';
+  currentLevel = 1;
+  loadLevel(currentLevel);
+}
+
+function quitToCharacterSelect() {
+  document.getElementById('pause-screen').style.display = 'none';
+  document.getElementById('round-screen').style.display = 'none';
+  document.getElementById('hud').style.display = 'none';
+  document.getElementById('btnPause').innerText = 'Pausa [P]';
+  gameState = 'START';
+  openCharacterSelect();
+}
+
+function togglePause() {
+  if (gameState === 'PLAYING') {
+    gameState = 'PAUSED';
+    document.getElementById('pause-screen').style.display = 'flex';
+    document.getElementById('btnPause').innerText = 'Reanudar';
+  } else if (gameState === 'PAUSED') {
+    gameState = 'PLAYING';
+    document.getElementById('pause-screen').style.display = 'none';
+    document.getElementById('btnPause').innerText = 'Pausa [P]';
+  }
+}
+
+function endRound(winner) {
+  gameState = 'ROUND_END';
+  const overlay = document.getElementById('round-screen');
+  const title = document.getElementById('msg-title');
+  const desc = document.getElementById('msg-desc');
+  const btn = document.getElementById('msg-btn');
+
+  overlay.style.display = 'flex';
+
+  if (winner === 'player') {
+    playSound('win');
+    if (currentLevel >= MAX_LEVELS) {
+      title.innerText = "¡CAMPEÓN DE LA CIUDAD!";
+      desc.innerText = `Has conquistado todos los distritos con ${playableCharacters[selectedCharKey].name}.`;
+      btn.innerText = "Jugar de Nuevo";
+    } else {
+      title.innerText = "¡VICTORIA!";
+      desc.innerText = `Has asegurado el control del Distrito ${currentLevel}. Prepárate para el siguiente rival.`;
+      btn.innerText = "Siguiente Rival";
+    }
+  } else {
+    title.innerText = "HAS SIDO NOQUEADO";
+    desc.innerText = "No lograste resistir los golpes del rival. Reintenta este nivel o cambia tu personaje.";
+    btn.innerText = "Reintentar Nivel";
+  }
+}
+
+function nextLevelOrRestart() {
+  if (player.health <= 0) {
+    loadLevel(currentLevel);
+  } else {
+    if (currentLevel >= MAX_LEVELS) {
+      currentLevel = 1;
+    } else {
+      currentLevel++;
+    }
+    loadLevel(currentLevel);
+  }
+}
+
+// Renderizado de fondo
+let frameCount = 0;
+function drawDecoratedBackground() {
+  frameCount++;
+
+  const skyGrad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
+  skyGrad.addColorStop(0, '#060b19');
+  skyGrad.addColorStop(0.6, '#131e3a');
+  skyGrad.addColorStop(1, '#2c1930');
+  ctx.fillStyle = skyGrad;
+  ctx.fillRect(0, 0, canvas.width, GROUND_Y);
+
+  stars.forEach(s => {
+    const alpha = 0.4 + 0.6 * Math.sin(frameCount * 0.05 + s.twinkle);
+    ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  ctx.save();
+  ctx.shadowColor = 'rgba(236, 240, 241, 0.4)';
+  ctx.shadowBlur = 25;
+  ctx.fillStyle = '#ecf0f1';
+  ctx.beginPath();
+  ctx.arc(770, 75, 34, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  buildings.forEach(b => {
+    ctx.fillStyle = '#141724';
+    ctx.fillRect(b.x, GROUND_Y - b.h, b.w, b.h);
+
+    ctx.fillStyle = '#0e111a';
+    ctx.fillRect(b.x + b.w / 2 - 2, GROUND_Y - b.h - 18, 4, 18);
+
+    b.windows.forEach(w => {
+      ctx.fillStyle = w.lit ? w.color : '#25293a';
+      ctx.fillRect(w.x, w.y, 8, 10);
+    });
+  });
+
+  const neonGlow = Math.sin(frameCount * 0.08) > -0.2;
+  ctx.save();
+  ctx.font = '900 18px sans-serif';
+  ctx.fillStyle = neonGlow ? '#ff007f' : '#551133';
+  ctx.shadowColor = neonGlow ? '#ff007f' : 'transparent';
+  ctx.shadowBlur = 12;
+  ctx.fillText("CLUB NEÓN", 248, 140);
+  ctx.restore();
+
+  const lampPositions = [100, 450, 800];
+  lampPositions.forEach(lx => {
+    ctx.fillStyle = '#2f3640';
+    ctx.fillRect(lx - 3, GROUND_Y - 110, 6, 110);
+    ctx.fillStyle = '#f1c40f';
+    ctx.fillRect(lx - 9, GROUND_Y - 115, 18, 6);
+
+    ctx.fillStyle = 'rgba(241, 196, 15, 0.06)';
+    ctx.beginPath();
+    ctx.moveTo(lx, GROUND_Y - 110);
+    ctx.lineTo(lx - 75, GROUND_Y);
+    ctx.lineTo(lx + 75, GROUND_Y);
+    ctx.closePath();
+    ctx.fill();
+  });
+
+  const groundGrad = ctx.createLinearGradient(0, GROUND_Y, 0, canvas.height);
+  groundGrad.addColorStop(0, '#1c1e24');
+  groundGrad.addColorStop(1, '#0c0d10');
+  ctx.fillStyle = groundGrad;
+  ctx.fillRect(0, GROUND_Y, canvas.width, canvas.height - GROUND_Y);
+
+  ctx.fillStyle = '#3a3e4a';
+  ctx.fillRect(0, GROUND_Y, canvas.width, 5);
+
+  ctx.fillStyle = '#111';
+  ctx.fillRect(290, GROUND_Y + 25, 45, 14);
+  ctx.fillRect(600, GROUND_Y + 25, 45, 14);
+}
+
+// Bucle principal
+function gameLoop() {
+  if (gameState === 'PLAYING') {
+    player.isBlocking = keys.s && player.isGrounded;
+
+    // Solo permitir que el jugador se mueva manualmente si no está siendo empujado fuertemente
+    if (!player.isBlocking && !player.isAttacking) {
+      if (player.hitCooldown <= 0) {
+        if (keys.a) player.vx = -player.speed;
+        else if (keys.d) player.vx = player.speed;
+        else player.vx = 0;
+      }
+    } else {
+      if (player.hitCooldown <= 0) player.vx = 0;
+    }
+
+    updateAI(enemy, player, levelConfigs[currentLevel - 1]);
+
+    player.update(enemy);
+    enemy.update(player);
+
+    projectiles.forEach(p => p.update());
+    projectiles = projectiles.filter(p => p.active);
+
+    if (comboTimer > 0) {
+      comboTimer--;
+      if (comboTimer <= 0) {
+        comboCount = 0;
+        document.getElementById('combo-text').style.opacity = '0';
+      }
+    }
+  }
+
+  ctx.save();
+  if (screenShake > 0) {
+    const offsetX = (Math.random() - 0.5) * screenShake * 2;
+    const offsetY = (Math.random() - 0.5) * screenShake * 2;
+    ctx.translate(offsetX, offsetY);
+    if (gameState === 'PLAYING') screenShake = Math.max(0, screenShake - 1);
+  }
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawDecoratedBackground();
+
+  for (let i = hitParticles.length - 1; i >= 0; i--) {
+    let p = hitParticles[i];
+    ctx.fillStyle = p.color;
+    ctx.fillRect(p.x, p.y, 4, 4);
+    if (gameState === 'PLAYING') {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life--;
+      if (p.life <= 0) hitParticles.splice(i, 1);
+    }
+  }
+
+  projectiles.forEach(p => p.draw());
+
+  if (gameState !== 'START') {
+    player.draw();
+    enemy.draw();
+  }
+
+  for (let i = floatingTexts.length - 1; i >= 0; i--) {
+    let t = floatingTexts[i];
+    ctx.save();
+    ctx.font = '900 16px sans-serif';
+    ctx.fillStyle = t.color;
+    ctx.globalAlpha = Math.max(0, t.life / 28);
+    ctx.shadowColor = '#000';
+    ctx.shadowBlur = 4;
+    ctx.fillText(t.text, t.x, t.y);
+    ctx.restore();
+
+    if (gameState === 'PLAYING') {
+      t.y += t.vy;
+      t.life--;
+      if (t.life <= 0) floatingTexts.splice(i, 1);
+    }
+  }
+
+  ctx.restore();
+
+  requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
+</script>
+</body>
+</html>

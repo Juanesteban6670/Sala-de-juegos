@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Arcade | Game Hub</title>
+  <!-- Fuente moderna Inter / Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --card-bg: rgba(18, 24, 38, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --primary: #6366f1;
+      --cyan: #06b6d4;
+      --accent: #ec4899;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Fondo ambiental con gradientes difuminados */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      width: 450px;
+      height: 450px;
+      border-radius: 50%;
+      filter: blur(140px);
+      z-index: -1;
+      pointer-events: none;
+    }
+    body::before {
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.25), transparent 70%);
+      top: -50px;
+      left: 10%;
+    }
+    body::after {
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.2), transparent 70%);
+      bottom: 50px;
+      right: 10%;
+    }
+
+    /* Encabezado */
+    header {
+      width: 100%;
+      max-width: 1240px;
+      padding: 3.5rem 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1.25rem;
+    }
+
+    .badges-wrapper {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 1rem;
+      border-radius: 9999px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #a5b4fc;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .brand-badge.dev-badge {
+      background: rgba(236, 72, 153, 0.1);
+      border-color: rgba(236, 72, 153, 0.3);
+      color: #f472b6;
+    }
+
+    .brand-badge span.dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 10px #22c55e;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #ffffff 30%, #a5b4fc 70%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Buscador & Controles */
+    .controls {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+      max-width: 550px;
+      margin-top: 0.5rem;
+    }
+
+    .search-box {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-box input {
+      width: 100%;
+      background: rgba(18, 24, 38, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.85rem 1rem 0.85rem 2.8rem;
+      color: white;
+      font-size: 0.95rem;
+      outline: none;
+      backdrop-filter: blur(12px);
+      transition: all 0.3s ease;
+    }
+
+    .search-box input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.35);
+    }
+
+    .search-box svg {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      fill: var(--text-muted);
+    }
+
+    /* Grid de Juegos */
+    main {
+      width: 100%;
+      max-width: 1240px;
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    /* Tarjeta individual */
+    .game-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .game-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(99, 102, 241, 0.5);
+      box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.3);
+    }
+
+    /* Preview Iframe */
+    .preview-box {
+      width: 100%;
+      height: 200px;
+      position: relative;
+      background: #020408;
+      overflow: hidden;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .preview-box iframe {
+      width: 1100px;
+      height: 700px;
+      border: none;
+      transform: scale(0.33);
+      transform-origin: top left;
+      pointer-events: none;
+      opacity: 0.85;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+
+    .game-card:hover .preview-box iframe {
+      transform: scale(0.36);
+      opacity: 1;
+    }
+
+    /* Tags en la preview */
+    .card-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(7, 9, 14, 0.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.25rem 0.65rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #38bdf8;
+    }
+
+    /* Contenido de la Tarjeta */
+    .game-info {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .game-info h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.35rem;
+    }
+
+    .game-info p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* Botones de acción */
+    .actions {
+      display: flex;
+      gap: 0.65rem;
+      margin-top: 0.5rem;
+    }
+
+    .btn-play-modal {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), #4f46e5);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-play-modal:hover {
+      background: linear-gradient(135deg, #4f46e5, var(--primary));
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+      transform: scale(1.02);
+    }
+
+    .btn-external {
+      padding: 0.8rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-external:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    /* Modal / Reproductor In-App */
+    .game-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 5, 8, 0.92);
+      backdrop-filter: blur(20px);
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .game-modal.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-header {
+      height: 60px;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .modal-author {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-left: 0.5rem;
+      border-left: 1px solid var(--card-border);
+      padding-left: 0.65rem;
+    }
+
+    .modal-controls {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .modal-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: background 0.2s ease;
+    }
+
+    .modal-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .modal-btn.close {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+    }
+
+    .modal-btn.close:hover {
+      background: rgba(239, 68, 68, 0.4);
+    }
+
+    .game-viewport {
+      flex: 1;
+      width: 100%;
+      height: calc(100% - 60px);
+      border: none;
+      background: #000;
+    }
+
+    /* Footer y Créditos */
+    footer {
+      width: 100%;
+      max-width: 1240px;
+      margin-top: 3rem;
+      padding: 2.5rem 1.5rem;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      text-align: center;
+    }
+
+    .footer-author {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .footer-author span {
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+
+    .footer-copy {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="badges-wrapper">
+      <div class="brand-badge">
+        <span class="dot"></span> 4 Juegos Listos
+      </div>
+      <div class="brand-badge dev-badge">
+        ✦ Dev: Juan Esteban De Los Rios Tibocha
+      </div>
+    </div>
+
+    <h1>Game Station Hub</h1>
+    <p style="color: var(--text-muted); max-width: 520px;">
+      Selecciona tu minijuego favorito y ejecútalo al instante en el reproductor integrado o en una pestaña nueva.
+    </p>
+
+    <!-- Buscador -->
+    <div class="controls">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24"><path d="M10 2a8 8 0 015.293 13.707l5 5a1 1 0 01-1.414 1.414l-5-5A8 8 0 1110 2zm0 2a6 6 0 100 12 6 6 0 000-12z"/></svg>
+        <input type="text" id="searchInput" placeholder="Buscar un juego...">
+      </div>
+    </div>
+  </header>
+
+  <main id="gamesContainer">
+
+    <!-- 1. CAJA REGISTRADORA -->
+    <div class="game-card" data-title="caja registradora simulación tienda gestión">
+      <div class="preview-box">
+        <span class="card-tag">Simulación</span>
+        <iframe src="cajaregistradora.html" loading="lazy"></iframe>
+      </div>
+      <div class="game-info">
+        <div>
+          <h3>Caja Registradora</h3>
+          <p>Simulador interactivo de caja de cobros, control de productos y cálculo automático de cambio.</p>
+        </div>
+        <div class="actions">
+          <button class="btn-play-modal" onclick="openGame('cajaregistradora.html', 'Caja Registradora')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Jugar
+          </button>
+          <a href="cajaregistradora.html" target="_blank" class="btn-external" title="Abrir en pestaña nueva">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. CARRERAS -->
+    <div class="game-card" data-title="carreras autos arcade velocidad pista">
+      <div class="preview-box">
+        <span class="card-tag" style="color: #f59e0b;">Arcade</span>
+        <iframe src="carreras.html" loading="lazy"></iframe>
+      </div>
+      <div class="game-info">
+        <div>
+          <h3>Carreras de Autos</h3>
+          <p>Supera obstáculos a máxima velocidad, esquiva contrincantes y bate récords en pista.</p>
+        </div>
+        <div class="actions">
+          <button class="btn-play-modal" onclick="openGame('carreras.html', 'Carreras de Autos')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Jugar
+          </button>
+          <a href="carreras.html" target="_blank" class="btn-external" title="Abrir en pestaña nueva">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. PELEAS -->
+    <div class="game-card" data-title="peleas combate lucha acción 1v1">
+      <div class="preview-box">
+        <span class="card-tag" style="color: #ef4444;">Acción</span>
+        <iframe src="peleas.html" loading="lazy"></iframe>
+      </div>
+      <div class="game-info">
+        <div>
+          <h3>Juego de Peleas</h3>
+          <p>Combate cuerpo a cuerpo con barra de salud, ataques especiales y combos rápidos.</p>
+        </div>
+        <div class="actions">
+          <button class="btn-play-modal" onclick="openGame('peleas.html', 'Juego de Peleas')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Jugar
+          </button>
+          <a href="peleas.html" target="_blank" class="btn-external" title="Abrir en pestaña nueva">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. TRAGAPERRAS -->
+    <div class="game-card" data-title="tragaperras casino slots azar suerte">
+      <div class="preview-box">
+        <span class="card-tag" style="color: #a855f7;">Casino</span>
+        <iframe src="tragaperras.html" loading="lazy"></iframe>
+      </div>
+      <div class="game-info">
+        <div>
+          <h3>Tragaperras (Slots)</h3>
+          <p>Gira los tambores, alinea las figuras ganadoras y acumula la mayor cantidad de créditos.</p>
+        </div>
+        <div class="actions">
+          <button class="btn-play-modal" onclick="openGame('tragaperras.html', 'Tragaperras')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Jugar
+          </button>
+          <a href="tragaperras.html" target="_blank" class="btn-external" title="Abrir en pestaña nueva">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Modal / Pantalla de Juego -->
+  <div id="gameModal" class="game-modal">
+    <div class="modal-header">
+      <div class="modal-title">
+        <span style="color: #6366f1;">🎮</span>
+        <span id="activeGameTitle">Cargando...</span>
+        <span class="modal-author">por Juan Esteban De Los Rios Tibocha</span>
+      </div>
+      <div class="modal-controls">
+        <button class="modal-btn" onclick="toggleFullscreen()">⛶ Pantalla Completa</button>
+        <button class="modal-btn close" onclick="closeGame()">✕ Salir al menú (ESC)</button>
+      </div>
+    </div>
+    <iframe id="gameViewport" class="game-viewport" src="" allowfullscreen></iframe>
+  </div>
+
+  <!-- Pie de página con Créditos y Copyright -->
+  <footer>
+    <div class="footer-author">
+      Desarrollado y diseñado por <span>Juan Esteban De Los Rios Tibocha</span>
+    </div>
+    <div class="footer-copy">
+      &copy; <span id="currentYear"></span> Juan Esteban De Los Rios Tibocha. Todos los derechos reservados.
+    </div>
+  </footer>
+
+  <script>
+    const modal = document.getElementById('gameModal');
+    const viewport = document.getElementById('gameViewport');
+    const gameTitle = document.getElementById('activeGameTitle');
+    const searchInput = document.getElementById('searchInput');
+    const cards = document.querySelectorAll('.game-card');
+
+    // Año automático para el copyright
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    // Función para abrir el modal del juego
+    function openGame(file, title) {
+      gameTitle.textContent = title;
+      viewport.src = file;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      viewport.focus();
+    }
+
+    // Función para cerrar el juego
+    function closeGame() {
+      modal.classList.remove('active');
+      viewport.src = ''; // Detiene la ejecución y los audios en segundo plano
+      document.body.style.overflow = 'auto';
+    }
+
+    // Alternar Pantalla Completa en el modal
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        modal.requestFullscreen().catch(err => alert(err.message));
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    // Cerrar modal al presionar Escape
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeGame();
+      }
+    });
+
+    // Filtro / Buscador en tiempo real
+    searchInput.addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase().trim();
+      cards.forEach(card => {
+        const keywords = card.getAttribute('data-title').toLowerCase();
+        if (keywords.includes(term)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
