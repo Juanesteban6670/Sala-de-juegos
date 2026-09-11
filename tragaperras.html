@@ -2,50 +2,68 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CyberCasino Hub - Supreme Edition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CyberCasino Hub - Apex Supreme</title>
   <style>
     :root {
-      --bg-dark: #07020d;
-      --card-bg: #140722;
+      --bg-dark: #070312;
+      --card-bg: rgba(22, 10, 38, 0.85);
+      --card-border: rgba(255, 215, 0, 0.28);
       --primary: #ff007f;
-      --accent: #00e5ff;
+      --accent: #00f0ff;
       --gold: #ffd700;
-      --gold-border: #ffd700;
+      --gold-dark: #b8860b;
+      --success: #00ff88;
+      --danger: #ff2a55;
+      --glow-primary: rgba(255, 0, 127, 0.4);
+      --glow-accent: rgba(0, 240, 255, 0.35);
       --slot-height: 95px;
     }
 
     body.theme-gold {
-      --bg-dark: #0a0700;
-      --card-bg: #1f1807;
+      --bg-dark: #0a0600;
+      --card-bg: rgba(30, 22, 8, 0.9);
+      --card-border: rgba(255, 215, 0, 0.45);
       --primary: #ffd700;
-      --accent: #ffae00;
-      --gold: #ffffff;
-      --gold-border: #ffd700;
+      --accent: #ff9900;
+      --gold: #fff2a3;
+      --glow-primary: rgba(255, 215, 0, 0.35);
+      --glow-accent: rgba(255, 153, 0, 0.35);
     }
 
     body.theme-matrix {
-      --bg-dark: #000a02;
-      --card-bg: #031407;
-      --primary: #00ff66;
-      --accent: #33ff00;
-      --gold: #00ff66;
-      --gold-border: #00ff66;
+      --bg-dark: #010a04;
+      --card-bg: rgba(4, 24, 10, 0.9);
+      --card-border: rgba(0, 255, 120, 0.35);
+      --primary: #00ff77;
+      --accent: #38ef7d;
+      --gold: #a8ffb2;
+      --glow-primary: rgba(0, 255, 119, 0.35);
+      --glow-accent: rgba(56, 239, 125, 0.35);
     }
 
-    * { box-sizing: border-box; user-select: none; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
 
     body {
       min-height: 100vh;
-      background: radial-gradient(circle at center, #1f0b36 0%, var(--bg-dark) 100%);
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100dvh;
+      background: radial-gradient(circle at 50% 15%, #240c42 0%, var(--bg-dark) 75%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 10px;
       overflow-x: hidden;
-      transition: background 0.3s;
+      transition: background 0.4s ease;
     }
 
     #confettiCanvas {
@@ -58,15 +76,18 @@
       z-index: 9999;
     }
 
+    /* BARRA SUPERIOR */
     header {
       width: 100%;
       max-width: 540px;
-      background: rgba(0, 0, 0, 0.7);
-      border: 2px solid var(--gold-border);
+      background: rgba(12, 5, 22, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--card-border);
       border-radius: 18px;
-      padding: 10px 16px;
+      padding: 10px 14px;
       margin-bottom: 8px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255,255,255,0.1);
     }
 
     .top-stats {
@@ -76,23 +97,30 @@
       margin-bottom: 6px;
     }
 
-    .wallet-box span { font-size: 0.65rem; color: #aaa; text-transform: uppercase; }
-    .wallet-box strong { font-size: 1.35rem; color: var(--gold); text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+    .wallet-box span { font-size: 0.65rem; color: #a49cb5; text-transform: uppercase; letter-spacing: 0.5px; }
+    .wallet-box strong {
+      font-size: 1.35rem;
+      color: var(--gold);
+      text-shadow: 0 0 12px var(--gold);
+      font-variant-numeric: tabular-nums;
+      display: block;
+    }
 
-    .header-actions { display: flex; gap: 4px; }
+    .header-actions { display: flex; gap: 6px; }
     .btn-action-small {
       border: none;
       color: #fff;
-      padding: 5px 8px;
-      font-size: 0.68rem;
-      font-weight: bold;
-      border-radius: 8px;
+      padding: 7px 11px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      border-radius: 10px;
       cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.1s;
     }
-    .btn-action-small:active { transform: scale(0.95); }
-    .btn-wheel { background: linear-gradient(180deg, var(--accent), #007acc); }
-    .btn-faucet { background: linear-gradient(180deg, var(--primary), #b30059); }
-    .btn-shop { background: linear-gradient(180deg, #9d4edd, #5a189a); }
+    .btn-action-small:active { transform: scale(0.94); }
+    .btn-wheel { background: linear-gradient(135deg, var(--accent), #0066cc); }
+    .btn-faucet { background: linear-gradient(135deg, var(--primary), #99004d); }
 
     .vip-bar-wrapper { margin-top: 4px; }
     .vip-info {
@@ -100,144 +128,196 @@
       justify-content: space-between;
       font-size: 0.65rem;
       color: #ddd;
-      margin-bottom: 2px;
-      font-weight: bold;
+      margin-bottom: 3px;
+      font-weight: 700;
     }
     .vip-progress {
       width: 100%;
       height: 7px;
-      background: #111;
+      background: #12091f;
       border-radius: 6px;
       overflow: hidden;
-      border: 1px solid #333;
+      border: 1px solid rgba(255,255,255,0.08);
     }
     .vip-fill {
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, var(--primary), var(--gold));
       transition: width 0.3s ease;
+      box-shadow: 0 0 8px var(--primary);
     }
+
+    /* JACKPOT Y TICKER SOCIAL */
+    .jackpot-banner {
+      width: 100%;
+      max-width: 540px;
+      background: linear-gradient(90deg, rgba(255,215,0,0.1), rgba(255,0,127,0.18), rgba(0,240,255,0.1));
+      border: 1px solid rgba(255,215,0,0.4);
+      border-radius: 10px;
+      padding: 5px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      box-shadow: 0 0 15px rgba(255,215,0,0.15);
+    }
+    .jackpot-title { font-size: 0.7rem; font-weight: 900; color: #ffd700; letter-spacing: 1px; }
+    .jackpot-val { font-size: 1.15rem; font-weight: 900; color: #fff; text-shadow: 0 0 10px #ffd700; font-variant-numeric: tabular-nums; }
 
     .feed-ticker {
       width: 100%;
       max-width: 540px;
       background: rgba(0,0,0,0.4);
-      padding: 4px 10px;
-      border-radius: 6px;
+      padding: 5px 10px;
+      border-radius: 8px;
       font-size: 0.7rem;
-      color: #ccc;
+      color: #c0b8d0;
       margin-bottom: 8px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      border: 1px dashed #3a1b54;
+      border: 1px solid rgba(255,255,255,0.06);
     }
 
-    nav {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 5px;
+    /* MEDIDOR DE RACHA */
+    .streak-indicator {
       width: 100%;
       max-width: 540px;
-      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #ff9900;
+      padding: 0 4px;
+      margin-bottom: 6px;
     }
-    .nav-sub {
+
+    /* NAVEGADORES */
+    nav, .nav-sub {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 5px;
+      gap: 6px;
       width: 100%;
       max-width: 540px;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
+    .nav-sub { margin-bottom: 10px; }
 
     .nav-btn {
       background: var(--card-bg);
-      border: 2px solid #3c1a59;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.08);
       color: #bbb;
-      padding: 7px 0;
-      border-radius: 10px;
+      padding: 9px 0;
+      border-radius: 12px;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 800;
       font-size: 0.75rem;
       transition: all 0.2s;
     }
     .nav-btn.active {
-      background: linear-gradient(180deg, #3d0d47, #1f0629);
+      background: linear-gradient(180deg, rgba(255,0,127,0.25), rgba(0,0,0,0.6));
       border-color: var(--accent);
-      color: var(--accent);
-      box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+      color: #fff;
+      box-shadow: 0 0 14px var(--glow-accent);
     }
 
+    /* CAJA PRINCIPAL */
     .game-box {
       display: none;
       width: 100%;
       max-width: 540px;
       background: var(--card-bg);
-      border: 3px solid var(--gold-border);
-      border-radius: 20px;
-      padding: 14px;
-      box-shadow: 0 0 25px rgba(0,0,0,0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1);
       text-align: center;
       position: relative;
     }
     .game-box.active { display: block; }
 
+    /* CONTROLES DE APUESTA */
     .bet-bar {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin: 10px 0;
-      background: rgba(0,0,0,0.5);
-      padding: 6px 12px;
-      border-radius: 12px;
+      justify-content: space-between;
+      gap: 6px;
+      margin: 12px 0;
+      background: rgba(0,0,0,0.55);
+      padding: 6px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
     }
+    .bet-controls-left { display: flex; align-items: center; gap: 6px; }
     .btn-round {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       background: #2b0b3a;
       border: 1px solid var(--gold);
       color: var(--gold);
       border-radius: 50%;
-      font-weight: bold;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.05rem;
+    }
+    .btn-quick {
+      background: #1c0b2b;
+      border: 1px solid #4a2869;
+      color: #ddd;
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 0.68rem;
+      font-weight: 800;
       cursor: pointer;
     }
+    .btn-quick:active { background: var(--primary); }
+
     .action-btn {
       width: 100%;
-      background: linear-gradient(180deg, var(--primary) 0%, #a8004f 100%);
+      background: linear-gradient(180deg, var(--primary) 0%, #b30059 100%);
       color: #fff;
       font-size: 1.05rem;
       font-weight: 900;
-      padding: 11px;
+      padding: 13px;
       border: none;
-      border-radius: 25px;
-      box-shadow: 0 4px 0 rgba(0,0,0,0.4);
+      border-radius: 16px;
+      box-shadow: 0 4px 18px var(--glow-primary);
       cursor: pointer;
       text-transform: uppercase;
       letter-spacing: 1px;
+      transition: filter 0.15s, transform 0.1s;
     }
     .action-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
-    .action-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: none; }
+    .action-btn:active:not(:disabled) { transform: translateY(2px); }
 
     .status-alert {
       min-height: 24px;
       margin: 6px 0;
       font-size: 0.85rem;
-      font-weight: bold;
+      font-weight: 800;
+      color: #ddd;
     }
-    .status-alert.win { color: #39ff14; text-shadow: 0 0 8px #39ff14; }
+    .status-alert.win { color: var(--success); text-shadow: 0 0 10px var(--success); }
 
     /* SLOTS */
     .reels-container {
       display: flex;
       justify-content: center;
       gap: 8px;
-      background: #000;
+      background: #030106;
       padding: 10px;
-      border-radius: 12px;
+      border-radius: 14px;
       position: relative;
       overflow: hidden;
-      border: 2px solid #220830;
+      border: 2px solid rgba(255,255,255,0.06);
+      box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
     }
     .payline-slot {
       position: absolute;
@@ -248,16 +328,17 @@
       background: var(--primary);
       transform: translateY(-50%);
       pointer-events: none;
-      box-shadow: 0 0 8px var(--primary);
+      box-shadow: 0 0 10px var(--primary);
+      z-index: 10;
     }
     .reel {
       width: 85px;
       height: var(--slot-height);
       overflow: hidden;
-      background: #eee;
-      border-radius: 6px;
+      background: linear-gradient(180deg, #1f1f2e 0%, #ffffff 50%, #1f1f2e 100%);
+      border-radius: 8px;
       position: relative;
-      box-shadow: inset 0 10px 10px rgba(0,0,0,0.5), inset 0 -10px 10px rgba(0,0,0,0.5);
+      box-shadow: inset 0 12px 14px rgba(0,0,0,0.6), inset 0 -12px 14px rgba(0,0,0,0.6);
     }
     .reel-strip { position: absolute; width: 100%; will-change: transform; }
     .symbol { height: var(--slot-height); display: flex; align-items: center; justify-content: center; font-size: 2.7rem; }
@@ -268,40 +349,43 @@
       grid-template-columns: repeat(5, 1fr);
       gap: 6px;
       margin: 10px auto;
-      max-width: 290px;
+      max-width: 300px;
     }
     .mine-tile {
       aspect-ratio: 1;
-      background: #250e38;
-      border: 2px solid #4a2869;
-      border-radius: 8px;
+      background: rgba(36, 14, 58, 0.7);
+      border: 1px solid #4a2869;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
     }
-    .mine-tile.revealed { background: #0c0414; cursor: default; }
-    .mine-tile.gem { border-color: #39ff14; box-shadow: 0 0 10px rgba(57, 255, 20, 0.4); }
-    .mine-tile.bomb { border-color: #ff3333; background: #3a0808; }
+    .mine-tile:active:not(.revealed):not(:disabled) { transform: scale(0.93); }
+    .mine-tile.revealed { background: #07030e; cursor: default; }
+    .mine-tile.gem { border-color: var(--success); box-shadow: 0 0 12px var(--success); }
+    .mine-tile.bomb { border-color: var(--danger); background: #330713; }
 
     /* PLINKO */
     #plinkoCanvas {
-      background: #080210;
-      border-radius: 12px;
-      border: 2px solid #331545;
+      background: #04010a;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.06);
       display: block;
       margin: 0 auto 6px auto;
+      max-width: 100%;
     }
 
     /* CRASH */
     #crashContainer {
       position: relative;
       width: 100%;
-      height: 210px;
-      background: radial-gradient(circle at bottom left, #1a052e 0%, #080112 100%);
-      border: 2px solid #36144d;
-      border-radius: 14px;
+      height: 220px;
+      background: radial-gradient(circle at bottom left, #1f0738 0%, #030108 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
       overflow: hidden;
       display: flex;
       align-items: center;
@@ -311,14 +395,15 @@
     .crash-multiplier {
       position: absolute;
       top: 15px;
-      font-size: 2.5rem;
+      font-size: 2.7rem;
       font-weight: 900;
       color: #fff;
       z-index: 3;
-      text-shadow: 0 0 15px rgba(0, 229, 255, 0.8);
+      text-shadow: 0 0 15px var(--accent);
       pointer-events: none;
+      font-variant-numeric: tabular-nums;
     }
-    .crash-multiplier.crashed { color: #ff3333; text-shadow: 0 0 15px rgba(255, 51, 51, 0.8); }
+    .crash-multiplier.crashed { color: var(--danger); text-shadow: 0 0 15px var(--danger); }
 
     /* LOOTBOX */
     .lootbox-viewport {
@@ -328,9 +413,10 @@
       margin: 15px auto;
       overflow: hidden;
       position: relative;
-      border: 3px solid var(--accent);
-      border-radius: 12px;
+      border: 2px solid var(--accent);
+      border-radius: 14px;
       background: #000;
+      box-shadow: 0 0 15px var(--glow-accent);
     }
     .lootbox-marker {
       position: absolute;
@@ -338,10 +424,10 @@
       bottom: 0;
       left: 50%;
       width: 3px;
-      background: #ff007f;
+      background: var(--primary);
       transform: translateX(-50%);
       z-index: 5;
-      box-shadow: 0 0 8px #ff007f;
+      box-shadow: 0 0 10px var(--primary);
     }
     .lootbox-track {
       display: flex;
@@ -358,13 +444,39 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      border-right: 1px solid #222;
-      background: #120420;
+      border-right: 1px solid #1a1a2e;
+      background: #11051c;
     }
-    .loot-card.common { border-bottom: 4px solid #888; }
+    .loot-card.common { border-bottom: 4px solid #777; }
     .loot-card.rare { border-bottom: 4px solid var(--accent); }
     .loot-card.epic { border-bottom: 4px solid var(--primary); }
     .loot-card.legendary { border-bottom: 4px solid var(--gold); }
+
+    /* MISIONES DIARIAS */
+    .mission-card {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+    }
+    .mission-info strong { font-size: 0.8rem; color: #fff; display: block; margin-bottom: 2px; }
+    .mission-info span { font-size: 0.68rem; color: #aaa; }
+    .btn-claim {
+      background: linear-gradient(135deg, var(--success), #00a859);
+      border: none;
+      color: #000;
+      font-weight: 900;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      cursor: pointer;
+    }
+    .btn-claim:disabled { background: #333; color: #777; cursor: not-allowed; }
 
     /* TIENDA & PERKS & BÓVEDA */
     .grid-cards {
@@ -376,23 +488,29 @@
     }
     .shop-item {
       background: rgba(0,0,0,0.5);
-      border: 1px solid #4a2869;
-      border-radius: 10px;
-      padding: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 10px;
       font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .shop-item strong { color: var(--gold); display: block; margin-bottom: 2px; }
     .btn-buy {
       width: 100%;
-      margin-top: 6px;
-      padding: 4px;
+      margin-top: 8px;
+      padding: 7px;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       background: var(--accent);
       color: #000;
-      font-weight: bold;
+      font-weight: 800;
       cursor: pointer;
+      transition: filter 0.1s;
     }
+    .btn-buy.equipped { background: var(--success); color: #000; cursor: default; }
+    .btn-buy:active:not(.equipped) { filter: brightness(0.9); }
 
     /* MODAL RULETA */
     .modal-overlay {
@@ -402,7 +520,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0,0,0,0.88);
       z-index: 1000;
       align-items: center;
       justify-content: center;
@@ -410,14 +528,15 @@
     .modal-overlay.open { display: flex; }
     .modal-content {
       background: var(--card-bg);
-      border: 4px solid var(--gold-border);
-      border-radius: 20px;
-      padding: 20px;
+      border: 2px solid var(--card-border);
+      border-radius: 24px;
+      padding: 22px;
       text-align: center;
       max-width: 340px;
       width: 90%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
     }
-    #wheelCanvas { border-radius: 50%; border: 4px solid var(--gold); margin: 10px auto; display: block; }
+    #wheelCanvas { border-radius: 50%; border: 4px solid var(--gold); margin: 12px auto; display: block; }
   </style>
 </head>
 <body>
@@ -438,12 +557,12 @@
   <header>
     <div class="top-stats">
       <div class="wallet-box">
-        <span>Saldo Ficticio</span>
-        <strong id="globalBalance">$1,000</strong>
+        <span>Balance Real</span>
+        <strong id="globalBalance">$1,000.00</strong>
       </div>
       <div class="header-actions">
         <button class="btn-action-small btn-wheel" onclick="openWheelModal()">🎁 Ruleta</button>
-        <button class="btn-action-small btn-faucet" onclick="claimFaucet()">+$500</button>
+        <button class="btn-action-small btn-faucet" onclick="claimFaucet()">+$500.00</button>
       </div>
     </div>
 
@@ -458,8 +577,20 @@
     </div>
   </header>
 
+  <!-- INNOVACIÓN 1: JACKPOT PROGRESIVO ACUMULATIVO -->
+  <div class="jackpot-banner">
+    <span class="jackpot-title">⚡ JACKPOT MAYOR</span>
+    <span class="jackpot-val" id="jackpotValDisplay">$12,450.00</span>
+  </div>
+
+  <!-- INNOVACIÓN 2: MEDIDOR DE RACHA GANADORA -->
+  <div class="streak-indicator">
+    <span>🔥 RACHA: <strong id="streakCount">0</strong> VENCIDAS</span>
+    <span>BONUS PRÓXIMO: <strong id="streakBonusPct">+0%</strong></span>
+  </div>
+
   <!-- Ticker Social en Vivo -->
-  <div class="feed-ticker" id="socialTicker">⚡ Conectado al servidor global del casino...</div>
+  <div class="feed-ticker" id="socialTicker">⚡ Conectado al servidor global del casino (RTP 96.0%)...</div>
 
   <!-- Barra Juegos Principales -->
   <nav>
@@ -474,7 +605,7 @@
     <button class="nav-btn" onclick="switchGame('vault')">⛏️ Bóveda</button>
     <button class="nav-btn" onclick="switchGame('perks')">🃏 Perks</button>
     <button class="nav-btn" onclick="switchGame('shop')">🎨 Tienda</button>
-    <button class="nav-btn" onclick="switchGame('lootbox')">📦 Cajas</button>
+    <button class="nav-btn" onclick="switchGame('quests')">🎯 Misiones</button>
   </div>
 
   <!-- JUEGO 1: SLOTS -->
@@ -485,25 +616,53 @@
       <div class="reel"><div class="reel-strip" id="strip1"></div></div>
       <div class="reel"><div class="reel-strip" id="strip2"></div></div>
     </div>
-    <div class="status-alert" id="slotsMsg">¡Alinea 3 símbolos!</div>
+    <div class="status-alert" id="slotsMsg">¡Alinea 3 símbolos en el centro!</div>
     <div class="bet-bar">
-      <button class="btn-round" onclick="adjustBetVal('slots', -5)">-</button>
-      <span>Apuesta: <strong id="slotsBetVal" style="color:var(--gold);">$10</strong></span>
-      <button class="btn-round" onclick="adjustBetVal('slots', 5)">+</button>
+      <div class="bet-controls-left">
+        <button class="btn-round" onclick="adjustBetVal('slots', -5)">-</button>
+        <span style="font-size:0.85rem;">Apuesta: <strong id="slotsBetVal" style="color:var(--gold);">$10.00</strong></span>
+        <button class="btn-round" onclick="adjustBetVal('slots', 5)">+</button>
+      </div>
+      <div>
+        <button class="btn-quick" onclick="quickBetScale('slots', 0.5)">½</button>
+        <button class="btn-quick" onclick="quickBetScale('slots', 2)">2x</button>
+        <button class="btn-quick" onclick="quickBetScale('slots', 'max')">MAX</button>
+      </div>
     </div>
     <button class="action-btn" id="slotsSpinBtn" onclick="spinSlots()">Girar</button>
   </div>
 
   <!-- JUEGO 2: MINES -->
   <div class="game-box" id="game-mines">
-    <div style="font-size: 0.8rem; color:#aaa;">Bombas: <strong>4</strong> | Multiplicador: <strong id="minesMultText" style="color:#39ff14">1.00x</strong></div>
-    <div id="shieldActiveBadge" style="display:none; font-size:0.7rem; color:var(--accent);">🛡️ Escudo Antiminas Activo</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; font-size: 0.8rem; color:#aaa; margin-bottom: 6px;">
+      <div>
+        Bombas:
+        <select id="minesBombCount" onchange="updateMinesBombCount()" style="background:#090a0e; color:#fff; border:1px solid #4a2869; border-radius:6px; font-weight:bold; padding:3px 6px;">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="15">15</option>
+        </select>
+      </div>
+      <div>Multiplicador: <strong id="minesMultText" style="color:#39ff14">1.00x</strong></div>
+    </div>
+    <div id="shieldActiveBadge" style="display:none; font-size:0.75rem; color:var(--accent); font-weight:bold; margin-bottom:4px;">🛡️ Escudo Antiminas Activo</div>
     <div class="mines-grid" id="minesBoard"></div>
     <div class="status-alert" id="minesMsg">Comienza tu ronda.</div>
     <div class="bet-bar">
-      <button class="btn-round" onclick="adjustBetVal('mines', -10)">-</button>
-      <span>Apuesta: <strong id="minesBetVal" style="color:var(--gold);">$20</strong></span>
-      <button class="btn-round" onclick="adjustBetVal('mines', 10)">+</button>
+      <div class="bet-controls-left">
+        <button class="btn-round" onclick="adjustBetVal('mines', -10)">-</button>
+        <span style="font-size:0.85rem;">Apuesta: <strong id="minesBetVal" style="color:var(--gold);">$20.00</strong></span>
+        <button class="btn-round" onclick="adjustBetVal('mines', 10)">+</button>
+      </div>
+      <div>
+        <button class="btn-quick" onclick="quickBetScale('mines', 0.5)">½</button>
+        <button class="btn-quick" onclick="quickBetScale('mines', 2)">2x</button>
+        <button class="btn-quick" onclick="quickBetScale('mines', 'max')">MAX</button>
+      </div>
     </div>
     <button class="action-btn" id="minesActionBtn" onclick="toggleMinesRound()">Iniciar Ronda</button>
   </div>
@@ -513,9 +672,16 @@
     <canvas id="plinkoCanvas" width="340" height="260"></canvas>
     <div class="status-alert" id="plinkoMsg">Suelta bolas en los clavos.</div>
     <div class="bet-bar">
-      <button class="btn-round" onclick="adjustBetVal('plinko', -5)">-</button>
-      <span>Por Bola: <strong id="plinkoBetVal" style="color:var(--gold);">$10</strong></span>
-      <button class="btn-round" onclick="adjustBetVal('plinko', 5)">+</button>
+      <div class="bet-controls-left">
+        <button class="btn-round" onclick="adjustBetVal('plinko', -5)">-</button>
+        <span style="font-size:0.85rem;">Por Bola: <strong id="plinkoBetVal" style="color:var(--gold);">$10.00</strong></span>
+        <button class="btn-round" onclick="adjustBetVal('plinko', 5)">+</button>
+      </div>
+      <div>
+        <button class="btn-quick" onclick="quickBetScale('plinko', 0.5)">½</button>
+        <button class="btn-quick" onclick="quickBetScale('plinko', 2)">2x</button>
+        <button class="btn-quick" onclick="quickBetScale('plinko', 'max')">MAX</button>
+      </div>
     </div>
     <button class="action-btn" onclick="dropPlinkoBall()">Soltar Bola</button>
   </div>
@@ -528,9 +694,16 @@
     </div>
     <div class="status-alert" id="crashMsg">¡Retírate antes del choque!</div>
     <div class="bet-bar">
-      <button class="btn-round" onclick="adjustBetVal('crash', -10)">-</button>
-      <span>Apuesta: <strong id="crashBetVal" style="color:var(--gold);">$20</strong></span>
-      <button class="btn-round" onclick="adjustBetVal('crash', 10)">+</button>
+      <div class="bet-controls-left">
+        <button class="btn-round" onclick="adjustBetVal('crash', -10)">-</button>
+        <span style="font-size:0.85rem;">Apuesta: <strong id="crashBetVal" style="color:var(--gold);">$20.00</strong></span>
+        <button class="btn-round" onclick="adjustBetVal('crash', 10)">+</button>
+      </div>
+      <div>
+        <button class="btn-quick" onclick="quickBetScale('crash', 0.5)">½</button>
+        <button class="btn-quick" onclick="quickBetScale('crash', 2)">2x</button>
+        <button class="btn-quick" onclick="quickBetScale('crash', 'max')">MAX</button>
+      </div>
     </div>
     <button class="action-btn" id="crashActionBtn" onclick="toggleCrash()">Despegar</button>
   </div>
@@ -540,22 +713,22 @@
     <h3 style="color:var(--gold); margin-bottom: 6px;">BÓVEDA DE MINERÍA PASIVA</h3>
     <p style="font-size: 0.75rem; color:#bbb;">Genera saldo por segundo incluso con la pestaña cerrada.</p>
     
-    <div style="margin: 15px 0; background:rgba(0,0,0,0.6); padding: 12px; border-radius: 12px;">
+    <div style="margin: 15px 0; background:rgba(0,0,0,0.6); padding: 12px; border-radius: 14px; border:1px solid rgba(255,255,255,0.06);">
       <div style="font-size:0.75rem; color:#aaa;">Rendimiento Actual:</div>
-      <div style="font-size:1.6rem; color:#39ff14; font-weight:bold;"><span id="passiveRateText">0</span> $/seg</div>
-      <div style="font-size:0.8rem; color:#ccc; margin-top:4px;">Acumulado no reclamado: <strong id="unclaimedVaultText" style="color:var(--gold);">$0</strong></div>
+      <div style="font-size:1.6rem; color:#39ff14; font-weight:900;"><span id="passiveRateText">0.00</span> $/seg</div>
+      <div style="font-size:0.8rem; color:#ccc; margin-top:4px;">Acumulado no reclamado: <strong id="unclaimedVaultText" style="color:var(--gold);">$0.00</strong></div>
     </div>
     <button class="action-btn" onclick="claimVaultDividends()">RECLAMAR SALDO ACUMULADO</button>
 
     <div class="grid-cards" style="margin-top: 15px;">
       <div class="shop-item">
-        <strong>GPU Miner v1 (+2$/s)</strong>
-        <span>Costo: $250</span>
+        <strong>GPU Miner v1 (+2.00$/s)</strong>
+        <span>Costo: $250.00</span>
         <button class="btn-buy" onclick="buyMiner(1, 250, 2)">Comprar</button>
       </div>
       <div class="shop-item">
-        <strong>Servidor Quántico (+10$/s)</strong>
-        <span>Costo: $1,000</span>
+        <strong>Servidor Quántico (+10.00$/s)</strong>
+        <span>Costo: $1,000.00</span>
         <button class="btn-buy" onclick="buyMiner(2, 1000, 10)">Comprar</button>
       </div>
     </div>
@@ -571,94 +744,87 @@
         <strong>🛡️ Escudo Antiminas</strong>
         <span>Ignora la 1ª bomba pisada en Mines.</span>
         <div>Stock: <strong id="perkShieldQty">0</strong></div>
-        <button class="btn-buy" onclick="buyPerk('shield', 150)">Comprar ($150)</button>
+        <button class="btn-buy" onclick="buyPerk('shield', 150)">Comprar ($150.00)</button>
       </div>
       <div class="shop-item">
         <strong>⚡ Hiperpropulsión</strong>
         <span>Crash inicia en 2.00x de inmediato.</span>
         <div>Stock: <strong id="perkHyperQty">0</strong></div>
-        <button class="btn-buy" onclick="buyPerk('hyper', 200)">Comprar ($200)</button>
+        <button class="btn-buy" onclick="buyPerk('hyper', 200)">Comprar ($200.00)</button>
       </div>
       <div class="shop-item">
         <strong>🧲 Plinko Suerte</strong>
         <span>Elimina multiplicadores &lt; 1.0x por 5 bolas.</span>
         <div>Stock: <strong id="perkMagnetQty">0</strong></div>
-        <button class="btn-buy" onclick="buyPerk('magnet', 180)">Comprar ($180)</button>
+        <button class="btn-buy" onclick="buyPerk('magnet', 180)">Comprar ($180.00)</button>
       </div>
       <div class="shop-item">
         <strong>🎲 Trébol Dorado</strong>
         <span>Slots: 2do tiro gratis si no aciertas nada.</span>
         <div>Stock: <strong id="perkCloverQty">0</strong></div>
-        <button class="btn-buy" onclick="buyPerk('clover', 220)">Comprar ($220)</button>
+        <button class="btn-buy" onclick="buyPerk('clover', 220)">Comprar ($220.00)</button>
       </div>
     </div>
   </div>
 
-  <!-- EXTENSIÓN 3: TIENDA & COSMÉTICOS -->
+  <!-- EXTENSIÓN 3: TIENDA DINÁMICA MEJORADA -->
   <div class="game-box" id="game-shop">
-    <h3 style="color:var(--gold); margin-bottom: 6px;">TIENDA VIP & COSMÉTICOS</h3>
-    <p style="font-size: 0.75rem; color:#bbb;">Personaliza la interfaz y el modelo de nave.</p>
+    <h3 style="color:var(--gold); margin-bottom: 6px;">TIENDA & ARMERÍA VIP</h3>
+    <p style="font-size: 0.75rem; color:#bbb;">Desbloquea aspectos exclusivos con balance real ficticio.</p>
 
-    <div class="grid-cards">
-      <div class="shop-item">
-        <strong>Tema: Oro Royale</strong>
-        <span>Estilo dorado imperial.</span>
-        <button class="btn-buy" onclick="applyTheme('gold')">Equipar</button>
-      </div>
-      <div class="shop-item">
-        <strong>Tema: Matrix Terminal</strong>
-        <span>Estilo hacker verde fosforescente.</span>
-        <button class="btn-buy" onclick="applyTheme('matrix')">Equipar</button>
-      </div>
-      <div class="shop-item">
-        <strong>Tema: Cyberpunk</strong>
-        <span>El estilo clásico púrpura/neón.</span>
-        <button class="btn-buy" onclick="applyTheme('default')">Equipar</button>
-      </div>
-      <div class="shop-item">
-        <strong>Skin Nave: OVNI</strong>
-        <span>Platillo volante en Crash.</span>
-        <button class="btn-buy" onclick="setShipSkin('ufo')">Equipar</button>
-      </div>
-      <div class="shop-item">
-        <strong>Skin Nave: Cohete Retro</strong>
-        <span>Nave clásica con punta carmesí.</span>
-        <button class="btn-buy" onclick="setShipSkin('retro')">Equipar</button>
-      </div>
-      <div class="shop-item">
-        <strong>Skin Nave: Stealth Fighter</strong>
-        <span>Caza poligonal hiperveloz.</span>
-        <button class="btn-buy" onclick="setShipSkin('stealth')">Equipar</button>
-      </div>
+    <div class="grid-cards" id="shopCatalogContainer">
+      <!-- Generado dinámicamente con estado Comprar / Equipar / Equipado -->
     </div>
   </div>
 
-  <!-- EXTENSIÓN 4: APERTURA DE CAJAS (LOOTBOXES) -->
-  <div class="game-box" id="game-lootbox">
-    <h3 style="color:var(--gold); margin-bottom: 4px;">CAJAS MISTERIOSAS</h3>
-    <p style="font-size: 0.75rem; color:#bbb;">Costo por apertura: <strong>$100</strong></p>
+  <!-- INNOVACIÓN 3: MISIONES DIARIAS -->
+  <div class="game-box" id="game-quests">
+    <h3 style="color:var(--gold); margin-bottom: 6px;">MISIONES DIARIAS</h3>
+    <p style="font-size: 0.75rem; color:#bbb; margin-bottom: 12px;">Completa desafíos para reclamar recompensas en efectivo.</p>
 
-    <div class="lootbox-viewport">
-      <div class="lootbox-marker"></div>
-      <div class="lootbox-track" id="lootTrack"></div>
+    <div class="mission-card">
+      <div class="mission-info">
+        <strong>🎰 Maestro del Giro</strong>
+        <span id="q1Status">Girar 5 veces en Slots (0/5)</span>
+      </div>
+      <button class="btn-claim" id="q1Btn" onclick="claimQuest(1, 200)" disabled>+$200.00</button>
     </div>
 
-    <div class="status-alert" id="lootMsg">Abre una caja para ganar hasta $1,500.</div>
-    <button class="action-btn" id="openLootBtn" onclick="openLootbox()">ABRIR CAJA ($100)</button>
+    <div class="mission-card">
+      <div class="mission-info">
+        <strong>💎 Buscador de Gemas</strong>
+        <span id="q2Status">Destapar 8 gemas en Mines (0/8)</span>
+      </div>
+      <button class="btn-claim" id="q2Btn" onclick="claimQuest(2, 300)" disabled>+$300.00</button>
+    </div>
+
+    <div class="mission-card">
+      <div class="mission-info">
+        <strong>🚀 Piloto Espacial</strong>
+        <span id="q3Status">Cobrar en Crash a más de 2.00x (0/1)</span>
+      </div>
+      <button class="btn-claim" id="q3Btn" onclick="claimQuest(3, 400)" disabled>+$400.00</button>
+    </div>
   </div>
 
   <script>
     // ==========================================================
-    // ESTADO PERSISTENTE, AUDIO & ECONOMÍA
+    // ESTADO PERSISTENTE, ECONOMÍA & JACKPOT PROGRESIVO
     // ==========================================================
-    let balance = parseInt(localStorage.getItem('cc_balance')) || 1000;
+    let balance = parseFloat(localStorage.getItem('cc_balance')) || 1000.00;
     let totalXp = parseInt(localStorage.getItem('cc_xp')) || 0;
     let lastWheelTime = parseInt(localStorage.getItem('cc_wheel')) || 0;
-    let passiveRate = parseInt(localStorage.getItem('cc_passiverate')) || 0;
+    let passiveRate = parseFloat(localStorage.getItem('cc_passiverate')) || 0;
     let lastPassiveTime = parseInt(localStorage.getItem('cc_lastpassivetime')) || Date.now();
     let perks = JSON.parse(localStorage.getItem('cc_perks')) || { shield: 0, hyper: 0, magnet: 0, clover: 0 };
     let currentShipSkin = localStorage.getItem('cc_shipskin') || 'stealth';
     let currentTheme = localStorage.getItem('cc_theme') || 'default';
+    let unlockedItems = JSON.parse(localStorage.getItem('cc_unlocked_items')) || ['default', 'stealth'];
+    let jackpotPool = parseFloat(localStorage.getItem('cc_jackpot')) || 12450.00;
+    let winStreak = 0;
+
+    // Misiones
+    let questProgress = JSON.parse(localStorage.getItem('cc_quests')) || { q1: 0, q2: 0, q3: 0, c1: false, c2: false, c3: false };
 
     const RANKS = [
       { name: "Bronce", req: 0 },
@@ -668,8 +834,12 @@
       { name: "Diamante VIP", req: 10000 }
     ];
 
+    function formatMoney(n) {
+      return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
     function saveState() {
-      localStorage.setItem('cc_balance', balance);
+      localStorage.setItem('cc_balance', balance.toFixed(2));
       localStorage.setItem('cc_xp', totalXp);
       localStorage.setItem('cc_wheel', lastWheelTime);
       localStorage.setItem('cc_passiverate', passiveRate);
@@ -677,10 +847,20 @@
       localStorage.setItem('cc_perks', JSON.stringify(perks));
       localStorage.setItem('cc_shipskin', currentShipSkin);
       localStorage.setItem('cc_theme', currentTheme);
+      localStorage.setItem('cc_unlocked_items', JSON.stringify(unlockedItems));
+      localStorage.setItem('cc_jackpot', jackpotPool.toFixed(2));
+      localStorage.setItem('cc_quests', JSON.stringify(questProgress));
+    }
+
+    function triggerHaptic(duration = 20) {
+      if (navigator.vibrate) {
+        try { navigator.vibrate(duration); } catch(e){}
+      }
     }
 
     function updateTopUI() {
-      document.getElementById('globalBalance').textContent = `$${balance.toLocaleString()}`;
+      document.getElementById('globalBalance').textContent = formatMoney(balance);
+      document.getElementById('jackpotValDisplay').textContent = formatMoney(jackpotPool);
       
       let currentRank = RANKS[0];
       let nextRank = RANKS[1];
@@ -704,33 +884,52 @@
         document.getElementById('vipFill').style.width = `100%`;
       }
 
-      // Actualizar stocks de Perks
       document.getElementById('perkShieldQty').textContent = perks.shield;
       document.getElementById('perkHyperQty').textContent = perks.hyper;
       document.getElementById('perkMagnetQty').textContent = perks.magnet;
       document.getElementById('perkCloverQty').textContent = perks.clover;
-      document.getElementById('passiveRateText').textContent = passiveRate;
+      document.getElementById('passiveRateText').textContent = passiveRate.toFixed(2);
 
+      // Streak UI
+      document.getElementById('streakCount').textContent = winStreak;
+      const bonusPct = Math.min(25, winStreak * 5);
+      document.getElementById('streakBonusPct').textContent = `+${bonusPct}%`;
+
+      updateQuestsUI();
       saveState();
+    }
+
+    function applyStreakWinBonus(amount) {
+      const bonusPct = Math.min(25, winStreak * 5) / 100;
+      winStreak++;
+      return amount * (1 + bonusPct);
+    }
+
+    function resetStreak() {
+      winStreak = 0;
+      updateTopUI();
     }
 
     function addBetXp(amount) {
       const oldRank = document.getElementById('vipRankText').textContent;
-      totalXp += amount;
+      totalXp += Math.floor(amount);
+      jackpotPool += amount * 0.02; // El 2% de cada apuesta va al bote
       updateTopUI();
       if (oldRank !== document.getElementById('vipRankText').textContent) {
-        balance += 250;
+        balance += 250.00;
         updateTopUI();
         showConfetti();
         playSound(800, 0.4, 'square');
-        alert("¡Ascenso de Rango VIP! Recibes +$250 en tu cuenta.");
+        triggerHaptic(80);
+        alert("¡Ascenso de Rango VIP! Recibes +$250.00 en tu cuenta.");
       }
     }
 
     function claimFaucet() {
-      balance += 500;
+      balance += 500.00;
       updateTopUI();
       playSound(600, 0.1, 'triangle');
+      triggerHaptic(30);
       showConfetti();
     }
 
@@ -738,8 +937,10 @@
     let audioCtx = null;
     function getAudio() {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
       return audioCtx;
     }
+
     function playSound(freq, duration, type = 'sine') {
       try {
         const ctx = getAudio();
@@ -756,12 +957,19 @@
       } catch(e){}
     }
 
+    function playChipClick() {
+      playSound(1200, 0.04, 'sine');
+      triggerHaptic(15);
+    }
+
     function switchGame(key) {
       document.querySelectorAll('.game-box').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('nav .nav-btn, .nav-sub .nav-btn').forEach(b => b.classList.remove('active'));
       document.getElementById(`game-${key}`).classList.add('active');
       event.target.classList.add('active');
+      playChipClick();
       if (key === 'crash') resizeCrash();
+      if (key === 'shop') renderShopCatalog();
     }
 
     // ==========================================================
@@ -808,7 +1016,7 @@
     updateConfetti();
 
     // ==========================================================
-    // BÓVEDA MINERA PASIVA (OFFLINE Y ONLINE)
+    // BÓVEDA MINERA PASIVA
     // ==========================================================
     function calculateUnclaimedDividends() {
       const now = Date.now();
@@ -819,7 +1027,7 @@
     function refreshVaultUI() {
       const unclaimed = calculateUnclaimedDividends();
       const el = document.getElementById('unclaimedVaultText');
-      if (el) el.textContent = `$${unclaimed.toLocaleString()}`;
+      if (el) el.textContent = formatMoney(unclaimed);
     }
     setInterval(refreshVaultUI, 1000);
 
@@ -831,6 +1039,7 @@
       updateTopUI();
       refreshVaultUI();
       showConfetti();
+      triggerHaptic(40);
       playSound(650, 0.2, 'triangle');
     }
 
@@ -838,143 +1047,164 @@
       if (balance < cost) return alert("Saldo insuficiente para comprar esta estación minera.");
       balance -= cost;
       passiveRate += rate;
-      lastPassiveTime = Date.now(); // Resetea acumulador al mejorar
+      lastPassiveTime = Date.now();
       updateTopUI();
       refreshVaultUI();
+      playChipClick();
       playSound(700, 0.2, 'triangle');
     }
 
     // ==========================================================
-    // SISTEMA DE PERKS & COSMÉTICOS
+    // SISTEMA DE PERKS
     // ==========================================================
     function buyPerk(key, price) {
       if (balance < price) return alert("Saldo insuficiente.");
       balance -= price;
       perks[key]++;
       updateTopUI();
-      playSound(550, 0.1);
+      playChipClick();
+    }
+
+    // ==========================================================
+    // TIENDA DINÁMICA CON COMPRA Y EQUIPADO REAL
+    // ==========================================================
+    const SHOP_ITEMS = [
+      { id: 'gold', type: 'theme', name: 'Tema: Oro Royale', price: 500, desc: 'Lujo satinado con destellos ámbar.' },
+      { id: 'matrix', type: 'theme', name: 'Tema: Matrix Terminal', price: 500, desc: 'Hacker neón verde fosforescente.' },
+      { id: 'default', type: 'theme', name: 'Tema: Cyberpunk', price: 0, desc: 'Púrpura y magenta clásico.' },
+      { id: 'ufo', type: 'skin', name: 'Skin: Platillo OVNI', price: 750, desc: 'Haz gravitatorio en Crash.' },
+      { id: 'retro', type: 'skin', name: 'Skin: Cohete Retro', price: 750, desc: 'Punta carmesí estilo años 50.' },
+      { id: 'stealth', type: 'skin', name: 'Skin: Stealth Fighter', price: 0, desc: 'Caza poligonal hiperveloz.' }
+    ];
+
+    function renderShopCatalog() {
+      const container = document.getElementById('shopCatalogContainer');
+      container.innerHTML = '';
+
+      SHOP_ITEMS.forEach(item => {
+        const isUnlocked = unlockedItems.includes(item.id) || item.price === 0;
+        const isEquipped = (item.type === 'theme' && currentTheme === item.id) || 
+                           (item.type === 'skin' && currentShipSkin === item.id);
+
+        let btnHtml = '';
+        if (isEquipped) {
+          btnHtml = `<button class="btn-buy equipped">EQUIPADO</button>`;
+        } else if (isUnlocked) {
+          btnHtml = `<button class="btn-buy" onclick="equipItem('${item.type}', '${item.id}')">EQUIPAR</button>`;
+        } else {
+          btnHtml = `<button class="btn-buy" onclick="purchaseItem('${item.type}', '${item.id}', ${item.price})">COMPRAR (${formatMoney(item.price)})</button>`;
+        }
+
+        const div = document.createElement('div');
+        div.className = 'shop-item';
+        div.innerHTML = `
+          <div>
+            <strong>${item.name}</strong>
+            <span style="color:#aaa;">${item.desc}</span>
+          </div>
+          ${btnHtml}
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function purchaseItem(type, id, price) {
+      if (balance < price) return alert("Saldo insuficiente para comprar este artículo.");
+      balance -= price;
+      unlockedItems.push(id);
+      equipItem(type, id);
+      showConfetti();
+      playSound(750, 0.2, 'triangle');
+    }
+
+    function equipItem(type, id) {
+      if (type === 'theme') {
+        currentTheme = id;
+        applyTheme(id);
+      } else {
+        currentShipSkin = id;
+      }
+      updateTopUI();
+      renderShopCatalog();
+      playChipClick();
     }
 
     function applyTheme(theme) {
       document.body.className = '';
       if (theme === 'gold') document.body.classList.add('theme-gold');
       if (theme === 'matrix') document.body.classList.add('theme-matrix');
-      currentTheme = theme;
-      saveState();
-    }
-
-    function setShipSkin(skin) {
-      currentShipSkin = skin;
-      saveState();
-      alert(`Skin equipada: ${skin.toUpperCase()}`);
     }
 
     // ==========================================================
-    // FEED SOCIAL & TORNEO ASÍNCRONO
+    // MISIONES DIARIAS
+    // ==========================================================
+    function updateQuestsUI() {
+      document.getElementById('q1Status').textContent = `Girar 5 veces en Slots (${Math.min(5, questProgress.q1)}/5)`;
+      document.getElementById('q2Status').textContent = `Destapar 8 gemas en Mines (${Math.min(8, questProgress.q2)}/8)`;
+      document.getElementById('q3Status').textContent = `Cobrar en Crash a > 2.00x (${Math.min(1, questProgress.q3)}/1)`;
+
+      document.getElementById('q1Btn').disabled = !(questProgress.q1 >= 5 && !questProgress.c1);
+      document.getElementById('q2Btn').disabled = !(questProgress.q2 >= 8 && !questProgress.c2);
+      document.getElementById('q3Btn').disabled = !(questProgress.q3 >= 1 && !questProgress.c3);
+
+      if (questProgress.c1) document.getElementById('q1Btn').textContent = 'COBRADA';
+      if (questProgress.c2) document.getElementById('q2Btn').textContent = 'COBRADA';
+      if (questProgress.c3) document.getElementById('q3Btn').textContent = 'COBRADA';
+    }
+
+    function claimQuest(num, reward) {
+      if (num === 1) questProgress.c1 = true;
+      if (num === 2) questProgress.c2 = true;
+      if (num === 3) questProgress.c3 = true;
+      balance += reward;
+      updateTopUI();
+      showConfetti();
+      playSound(800, 0.3, 'square');
+      triggerHaptic(50);
+    }
+
+    // ==========================================================
+    // FEED SOCIAL
     // ==========================================================
     const BOT_NAMES = ["Neo_99", "CryptoKing", "Valkyrie", "ZeroCold", "AstroGirl", "PixelWhale", "Shadow77"];
-    const BOT_GAMES = ["Crash", "Mines", "Slots", "Plinko", "Lootboxes"];
+    const BOT_GAMES = ["Crash", "Mines", "Slots", "Plinko"];
 
     function triggerSocialEvent() {
       const user = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
       const game = BOT_GAMES[Math.floor(Math.random() * BOT_GAMES.length)];
       const win = Math.floor(Math.random() * 2500) + 120;
       const mult = (Math.random() * 15 + 1.2).toFixed(2);
-      document.getElementById('socialTicker').innerHTML = `🔥 <strong>${user}</strong> ganó <strong>$${win}</strong> (${mult}x) en ${game}!`;
+      document.getElementById('socialTicker').innerHTML = `🔥 <strong>${user}</strong> ganó <strong>${formatMoney(win)}</strong> (${mult}x) en ${game}!`;
       setTimeout(triggerSocialEvent, Math.random() * 4000 + 3000);
     }
     triggerSocialEvent();
 
     // ==========================================================
-    // APERTURA DE CAJAS (LOOTBOXES)
+    // APUESTAS
     // ==========================================================
-    const LOOT_ITEMS = [
-      { name: "$20", type: "common", value: 20 },
-      { name: "$50", type: "common", value: 50 },
-      { name: "$80", type: "common", value: 80 },
-      { name: "$150", type: "rare", value: 150 },
-      { name: "$250", type: "rare", value: 250 },
-      { name: "$500", type: "epic", value: 500 },
-      { name: "$1,500", type: "legendary", value: 1500 }
-    ];
+    const bets = { slots: 10.00, mines: 20.00, plinko: 10.00, crash: 20.00 };
 
-    let isLootOpening = false;
-    const lootTrack = document.getElementById('lootTrack');
-
-    function buildLootTrack(targetItem) {
-      lootTrack.innerHTML = '';
-      const totalCards = 40;
-      for (let i = 0; i < totalCards; i++) {
-        let itm = LOOT_ITEMS[Math.floor(Math.random() * LOOT_ITEMS.length)];
-        if (i === 32) itm = targetItem; // Card objetivo
-        const div = document.createElement('div');
-        div.className = `loot-card ${itm.type}`;
-        div.innerHTML = `<span style="font-size:1.4rem;">📦</span><strong style="margin-top:4px;">${itm.name}</strong>`;
-        lootTrack.appendChild(div);
-      }
-    }
-
-    function openLootbox() {
-      if (isLootOpening) return;
-      if (balance < 100) return alert("Saldo insuficiente para abrir la caja ($100).");
-
-      balance -= 100;
-      addBetXp(100);
-      isLootOpening = true;
-      document.getElementById('openLootBtn').disabled = true;
-
-      // Probabilidades
-      const r = Math.random() * 100;
-      let wonItem;
-      if (r < 50) wonItem = LOOT_ITEMS[0];
-      else if (r < 75) wonItem = LOOT_ITEMS[1];
-      else if (r < 88) wonItem = LOOT_ITEMS[2];
-      else if (r < 94) wonItem = LOOT_ITEMS[3];
-      else if (r < 98) wonItem = LOOT_ITEMS[4];
-      else if (r < 99.5) wonItem = LOOT_ITEMS[5];
-      else wonItem = LOOT_ITEMS[6];
-
-      buildLootTrack(wonItem);
-
-      // Desplazamiento
-      const cardWidth = 100;
-      const targetPos = 32 * cardWidth - (320 / 2) + (cardWidth / 2) + (Math.random() * 40 - 20);
-      lootTrack.style.transition = 'none';
-      lootTrack.style.transform = 'translateX(0px)';
-
-      setTimeout(() => {
-        lootTrack.style.transition = 'transform 4.5s cubic-bezier(0.1, 0.9, 0.15, 1)';
-        lootTrack.style.transform = `translateX(-${targetPos}px)`;
-        playSound(400, 0.1);
-      }, 50);
-
-      setTimeout(() => {
-        isLootOpening = false;
-        document.getElementById('openLootBtn').disabled = false;
-        balance += wonItem.value;
-        updateTopUI();
-        document.getElementById('lootMsg').className = 'status-alert win';
-        document.getElementById('lootMsg').textContent = `¡Abriste la caja y obtuviste: ${wonItem.name}!`;
-        if (wonItem.value >= 250) { showConfetti(); playSound(800, 0.3, 'square'); }
-        else { playSound(550, 0.15); }
-      }, 4800);
-    }
-
-    // ==========================================================
-    // CONTROL DE APUESTAS
-    // ==========================================================
-    const bets = { slots: 10, mines: 20, plinko: 10, crash: 20 };
     function adjustBetVal(game, delta) {
       const next = bets[game] + delta;
-      if (next >= 5 && next <= balance) {
-        bets[game] = next;
-        document.getElementById(`${game}BetVal`).textContent = `$${bets[game]}`;
-        playSound(450, 0.03);
+      if (next >= 1.00 && next <= balance) {
+        bets[game] = parseFloat(next.toFixed(2));
+        document.getElementById(`${game}BetVal`).textContent = formatMoney(bets[game]);
+        playChipClick();
       }
     }
 
+    function quickBetScale(game, factor) {
+      let next = bets[game];
+      if (factor === 0.5) next = Math.max(1.00, next / 2);
+      else if (factor === 2) next = Math.min(balance, next * 2);
+      else if (factor === 'max') next = Math.max(1.00, balance);
+      bets[game] = parseFloat(next.toFixed(2));
+      document.getElementById(`${game}BetVal`).textContent = formatMoney(bets[game]);
+      playChipClick();
+    }
+
     // ==========================================================
-    // JUEGO 1: SLOTS
+    // JUEGO 1: SLOTS (CON JACKPOT MAYOR 777)
     // ==========================================================
     const SLOT_SYMBOLS = ['🍒', '🍋', '🍇', '🔔', '⭐', '7️⃣'];
     const SLOT_MULTIPLIERS = { '🍒': 4, '🍋': 8, '🍇': 15, '🔔': 25, '⭐': 50, '7️⃣': 100 };
@@ -998,12 +1228,22 @@
       document.getElementById('slotsSpinBtn').disabled = true;
       document.getElementById('slotsMsg').className = 'status-alert';
       document.getElementById('slotsMsg').textContent = "Girando...";
+      triggerHaptic(20);
 
-      const targetSymbols = [
-        SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)],
-        SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)],
-        SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)]
-      ];
+      questProgress.q1++;
+      updateQuestsUI();
+
+      function pickRandomSlotSymbol() {
+        const rand = Math.random() * 100;
+        if (rand < 32) return '🍒';
+        if (rand < 55) return '🍋';
+        if (rand < 74) return '🍇';
+        if (rand < 88) return '🔔';
+        if (rand < 96) return '⭐';
+        return '7️⃣';
+      }
+
+      const targetSymbols = [pickRandomSlotSymbol(), pickRandomSlotSymbol(), pickRandomSlotSymbol()];
 
       const promises = strips.map((strip, idx) => {
         return new Promise(resolve => {
@@ -1015,10 +1255,14 @@
           const shift = (list.length - 1) * SLOT_HEIGHT;
           const duration = 1200 + idx * 350;
 
-          strip.style.transition = `transform ${duration}ms cubic-bezier(0.1, 0.8, 0.2, 1)`;
+          strip.style.transition = `transform ${duration}ms cubic-bezier(0.2, 0.9, 0.1, 1.08)`;
           strip.style.transform = `translateY(-${shift}px)`;
 
-          setTimeout(() => playSound(320 + idx * 80, 0.08, 'triangle'), duration - 60);
+          setTimeout(() => {
+            playSound(320 + idx * 80, 0.08, 'triangle');
+            triggerHaptic(15);
+          }, duration - 60);
+
           setTimeout(() => {
             strip.style.transition = 'none';
             setupStrip(strip, targetSymbols[idx]);
@@ -1033,27 +1277,42 @@
         document.getElementById('slotsSpinBtn').disabled = false;
         const [s1, s2, s3] = targetSymbols;
 
-        if (s1 === s2 && s2 === s3) {
-          const win = bets.slots * SLOT_MULTIPLIERS[s1];
+        if (s1 === '7️⃣' && s2 === '7️⃣' && s3 === '7️⃣') {
+          // BOTE MAYOR
+          const wonJackpot = jackpotPool;
+          jackpotPool = 5000.00;
+          balance += wonJackpot;
+          updateTopUI();
+          document.getElementById('slotsMsg').className = 'status-alert win';
+          document.getElementById('slotsMsg').textContent = `¡JACKPOT MAYOR GANADO! ${formatMoney(wonJackpot)}`;
+          showConfetti();
+          playSound(900, 0.5, 'square');
+          triggerHaptic(150);
+        } else if (s1 === s2 && s2 === s3) {
+          let win = bets.slots * SLOT_MULTIPLIERS[s1];
+          win = applyStreakWinBonus(win);
           balance += win;
           updateTopUI();
           document.getElementById('slotsMsg').className = 'status-alert win';
-          document.getElementById('slotsMsg').textContent = `¡JACKPOT! Ganaste $${win}`;
+          document.getElementById('slotsMsg').textContent = `¡Premio x3! Ganaste ${formatMoney(win)}`;
           showConfetti();
           playSound(850, 0.3, 'square');
+          triggerHaptic(80);
         } else if (s1 === s2 || s2 === s3 || s1 === s3) {
-          const win = Math.floor(bets.slots * 1.5);
+          let win = bets.slots * 1.5;
+          win = applyStreakWinBonus(win);
           balance += win;
           updateTopUI();
           document.getElementById('slotsMsg').className = 'status-alert win';
-          document.getElementById('slotsMsg').textContent = `Par: +$${win}`;
+          document.getElementById('slotsMsg').textContent = `Par acierto: +${formatMoney(win)}`;
           playSound(550, 0.12);
+          triggerHaptic(30);
         } else {
-          // Perk Trébol Dorado
+          resetStreak();
           if (perks.clover > 0) {
             perks.clover--;
             updateTopUI();
-            document.getElementById('slotsMsg').textContent = "¡Trébol Dorado usado! Tirada gratis extra...";
+            document.getElementById('slotsMsg').textContent = "¡Trébol Dorado! Tirada extra gratis...";
             setTimeout(spinSlots, 800);
           } else {
             document.getElementById('slotsMsg').textContent = "Sigue probando.";
@@ -1063,12 +1322,19 @@
     }
 
     // ==========================================================
-    // JUEGO 2: MINES (CON SHIELD PERK)
+    // JUEGO 2: MINES
     // ==========================================================
-    const TOTAL_TILES = 25, MINES_COUNT = 4;
+    const TOTAL_TILES = 25;
+    let minesCount = 4;
     let minesActive = false, bombSet = new Set(), gemsCount = 0;
     let shieldUsedThisRound = false;
     const minesBoard = document.getElementById('minesBoard');
+
+    function updateMinesBombCount() {
+      if (minesActive) return;
+      minesCount = parseInt(document.getElementById('minesBombCount').value);
+      playChipClick();
+    }
 
     function initMinesGrid() {
       minesBoard.innerHTML = '';
@@ -1082,9 +1348,12 @@
     initMinesGrid();
 
     function calcMinesMultiplier(revealed) {
-      let mult = 1.0;
-      for (let i = 0; i < revealed; i++) mult *= (TOTAL_TILES - i) / (TOTAL_TILES - MINES_COUNT - i);
-      return parseFloat((mult * 0.95).toFixed(2));
+      if (revealed === 0) return 1.0;
+      let p = 1.0;
+      for (let i = 0; i < revealed; i++) {
+        p *= (TOTAL_TILES - minesCount - i) / (TOTAL_TILES - i);
+      }
+      return parseFloat(((1 / p) * 0.96).toFixed(2));
     }
 
     function toggleMinesRound() {
@@ -1096,20 +1365,23 @@
         gemsCount = 0;
         shieldUsedThisRound = false;
         bombSet.clear();
-        while (bombSet.size < MINES_COUNT) bombSet.add(Math.floor(Math.random() * TOTAL_TILES));
+        while (bombSet.size < minesCount) bombSet.add(Math.floor(Math.random() * TOTAL_TILES));
 
         initMinesGrid();
         document.getElementById('minesMultText').textContent = "1.00x";
         document.getElementById('minesMsg').className = 'status-alert';
         document.getElementById('minesMsg').textContent = "¡Descubre gemas y retírate a tiempo!";
-        document.getElementById('minesActionBtn').textContent = "Retirarse ($0)";
-        document.getElementById('minesActionBtn').style.background = "linear-gradient(180deg, #2b9348, #007200)";
+        document.getElementById('minesActionBtn').textContent = "Retirarse ($0.00)";
+        document.getElementById('minesActionBtn').style.background = "linear-gradient(180deg, #ff9900 0%, #cc7a00 100%)";
+        document.getElementById('minesBombCount').disabled = true;
 
         if (perks.shield > 0) {
           document.getElementById('shieldActiveBadge').style.display = 'block';
         } else {
           document.getElementById('shieldActiveBadge').style.display = 'none';
         }
+        playChipClick();
+        triggerHaptic(20);
       } else {
         cashOutMines();
       }
@@ -1119,7 +1391,6 @@
       if (!minesActive || tile.classList.contains('revealed')) return;
 
       if (bombSet.has(idx)) {
-        // ¿Tiene escudo?
         if (perks.shield > 0 && !shieldUsedThisRound) {
           perks.shield--;
           shieldUsedThisRound = true;
@@ -1128,18 +1399,24 @@
           tile.classList.add('revealed');
           tile.textContent = '🛡️';
           tile.style.borderColor = 'var(--accent)';
-          document.getElementById('minesMsg').textContent = "¡Escudo destruido! Bomba anulada.";
+          document.getElementById('minesMsg').textContent = "¡Escudo detonado! Mina anulada.";
           playSound(600, 0.2, 'triangle');
+          triggerHaptic(40);
           return;
         }
 
         tile.classList.add('revealed', 'bomb');
         tile.textContent = '💣';
         minesActive = false;
-        document.getElementById('minesMsg').textContent = "¡BOOM! Perdiste.";
+        resetStreak();
+        document.getElementById('minesMsg').textContent = "¡BOOM! Perdiste la apuesta.";
         playSound(140, 0.4, 'sawtooth');
+        triggerHaptic(120);
+
         document.getElementById('minesActionBtn').textContent = "Iniciar Ronda";
         document.getElementById('minesActionBtn').style.background = "";
+        document.getElementById('minesBombCount').disabled = false;
+
         document.querySelectorAll('.mine-tile').forEach((t, i) => {
           if (bombSet.has(i)) { t.classList.add('revealed', 'bomb'); t.textContent = '💣'; }
         });
@@ -1147,39 +1424,52 @@
         tile.classList.add('revealed', 'gem');
         tile.textContent = '💎';
         gemsCount++;
+        questProgress.q2++;
+        updateQuestsUI();
+
         const mult = calcMinesMultiplier(gemsCount);
-        document.getElementById('minesMultText').textContent = `${mult}x`;
-        document.getElementById('minesActionBtn').textContent = `Retirarse ($${Math.floor(bets.mines * mult)})`;
+        document.getElementById('minesMultText').textContent = `${mult.toFixed(2)}x`;
+        const potWin = bets.mines * mult;
+        document.getElementById('minesActionBtn').textContent = `Retirarse (${formatMoney(potWin)})`;
         playSound(420 + gemsCount * 35, 0.08);
+        triggerHaptic(15);
+
+        if (gemsCount === TOTAL_TILES - minesCount) {
+          cashOutMines();
+        }
       }
     }
 
     function cashOutMines() {
-      const win = Math.floor(bets.mines * calcMinesMultiplier(gemsCount));
+      const mult = calcMinesMultiplier(gemsCount);
+      let win = bets.mines * mult;
+      win = applyStreakWinBonus(win);
       balance += win;
       updateTopUI();
       minesActive = false;
       document.getElementById('minesMsg').className = 'status-alert win';
-      document.getElementById('minesMsg').textContent = `¡Cobraste $${win}!`;
+      document.getElementById('minesMsg').textContent = `¡Cobraste ${formatMoney(win)}!`;
       showConfetti();
       playSound(700, 0.2, 'triangle');
+      triggerHaptic(60);
       document.getElementById('minesActionBtn').textContent = "Iniciar Ronda";
       document.getElementById('minesActionBtn').style.background = "";
+      document.getElementById('minesBombCount').disabled = false;
     }
 
     // ==========================================================
-    // JUEGO 3: PLINKO (CON IMÁN PERK)
+    // JUEGO 3: PLINKO
     // ==========================================================
     const pCanvas = document.getElementById('plinkoCanvas');
     const pCtx = pCanvas.getContext('2d');
-    const plinkoRows = 7, pPins = [], pMults = [5, 2, 0.5, 0.2, 0.5, 2, 5];
+    const plinkoRows = 7, pPins = [], pMults = [5.6, 2.1, 0.6, 0.4, 0.6, 2.1, 5.6];
     let pBalls = [];
 
     for (let r = 0; r < plinkoRows; r++) {
       const count = r + 3;
-      const sp = 280 / (count + 1);
+      const sp = pCanvas.width / (count + 1);
       for (let i = 0; i < count; i++) {
-        pPins.push({ x: 30 + sp * (i + 1), y: 40 + r * 28, r: 3 });
+        pPins.push({ x: sp * (i + 1), y: 38 + r * 28, r: 3.2 });
       }
     }
 
@@ -1187,7 +1477,7 @@
       if (balance < bets.plinko) return alert("¡Saldo insuficiente!");
       balance -= bets.plinko;
       addBetXp(bets.plinko);
-      playSound(500, 0.04);
+      playChipClick();
 
       let isMagnet = false;
       if (perks.magnet > 0) {
@@ -1198,10 +1488,10 @@
 
       pBalls.push({
         x: pCanvas.width / 2 + (Math.random() - 0.5) * 6,
-        y: 15,
-        vx: 0,
-        vy: 1.5,
-        r: 5,
+        y: 12,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: 1.4,
+        r: 4.8,
         bet: bets.plinko,
         magnet: isMagnet
       });
@@ -1209,12 +1499,12 @@
 
     function updatePlinko() {
       pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
-      pCtx.fillStyle = '#fff';
+      pCtx.fillStyle = '#aaa';
       pPins.forEach(p => { pCtx.beginPath(); pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2); pCtx.fill(); });
 
       const bW = pCanvas.width / pMults.length;
       pMults.forEach((m, i) => {
-        pCtx.fillStyle = m >= 2 ? '#ff007f' : (m < 1 ? '#270a38' : '#00e5ff');
+        pCtx.fillStyle = m >= 2 ? '#ff007f' : (m < 1 ? '#180724' : '#00e5ff');
         pCtx.fillRect(i * bW + 2, pCanvas.height - 22, bW - 4, 18);
         pCtx.fillStyle = '#fff';
         pCtx.font = 'bold 10px system-ui';
@@ -1228,8 +1518,8 @@
           const dx = b.x - p.x, dy = b.y - p.y;
           if (Math.hypot(dx, dy) < b.r + p.r) {
             const angle = Math.atan2(dy, dx);
-            b.vx = Math.cos(angle) * 1.4 + (Math.random() - 0.5) * 0.3;
-            b.vy = Math.abs(Math.sin(angle) * 1.4);
+            b.vx = Math.cos(angle) * 1.3 + (Math.random() - 0.5) * 0.3;
+            b.vy = Math.abs(Math.sin(angle) * 1.3);
             playSound(700, 0.02, 'sine');
           }
         });
@@ -1242,13 +1532,16 @@
         if (b.y >= pCanvas.height - 24) {
           let slot = Math.min(pMults.length - 1, Math.max(0, Math.floor(b.x / bW)));
           let mult = pMults[slot];
-          if (b.magnet && mult < 1.0) mult = 1.0; // Plinko Suerte Perk
+          if (b.magnet && mult < 1.0) mult = 1.0;
 
-          const won = Math.floor(b.bet * mult);
+          let won = b.bet * mult;
+          if (mult >= 1) won = applyStreakWinBonus(won);
+          else resetStreak();
+
           balance += won;
           updateTopUI();
-          document.getElementById('plinkoMsg').textContent = `Resultado: ${mult}x (+$${won})`;
-          if (mult >= 2) { showConfetti(); playSound(600, 0.15, 'triangle'); }
+          document.getElementById('plinkoMsg').textContent = `Resultado: ${mult}x (+${formatMoney(won)})`;
+          if (mult >= 2) { showConfetti(); playSound(600, 0.15, 'triangle'); triggerHaptic(40); }
           pBalls.splice(idx, 1);
         }
       });
@@ -1257,7 +1550,7 @@
     updatePlinko();
 
     // ==========================================================
-    // JUEGO 4: CRASH (SKINS VECTORIALES Y HYPER PERK)
+    // JUEGO 4: CRASH CON TRAYECTORIA DINÁMICA & SKINS
     // ==========================================================
     const crashCanvas = document.getElementById('crashCanvas');
     const cCtx = crashCanvas.getContext('2d');
@@ -1278,7 +1571,6 @@
       cCtx.rotate(angle);
 
       if (currentShipSkin === 'ufo') {
-        // OVNI Alienígena
         cCtx.fillStyle = '#00e5ff';
         cCtx.beginPath();
         cCtx.arc(0, -4, 8, Math.PI, 0);
@@ -1288,23 +1580,15 @@
         cCtx.ellipse(0, 0, 16, 6, 0, 0, Math.PI * 2);
         cCtx.fill();
       } else if (currentShipSkin === 'retro') {
-        // Cohete Retro
         cCtx.fillStyle = '#f0f0f0';
         cCtx.beginPath();
-        cCtx.moveTo(16, 0);
-        cCtx.lineTo(-12, -7);
-        cCtx.lineTo(-12, 7);
-        cCtx.closePath();
-        cCtx.fill();
+        cCtx.moveTo(16, 0); cCtx.lineTo(-12, -7); cCtx.lineTo(-12, 7);
+        cCtx.closePath(); cCtx.fill();
         cCtx.fillStyle = '#d90429';
         cCtx.beginPath();
-        cCtx.moveTo(16, 0);
-        cCtx.lineTo(6, -4);
-        cCtx.lineTo(6, 4);
-        cCtx.closePath();
-        cCtx.fill();
+        cCtx.moveTo(16, 0); cCtx.lineTo(6, -4); cCtx.lineTo(6, 4);
+        cCtx.closePath(); cCtx.fill();
       } else {
-        // Stealth Fighter
         cCtx.fillStyle = '#ff007f';
         cCtx.beginPath();
         cCtx.moveTo(-10, -4); cCtx.lineTo(-16, -12); cCtx.lineTo(-4, -5);
@@ -1344,38 +1628,45 @@
         }
         crashMultiplier = baseStart;
 
-        const rand = Math.random();
-        crashTarget = rand < 0.08 ? 1.0 : parseFloat((0.96 / (1 - rand)).toFixed(2));
-        if (crashTarget < baseStart) crashTarget = baseStart + 0.5;
+        const e = Math.random();
+        crashTarget = e < 0.04 ? 1.00 : parseFloat((0.96 / (1 - e)).toFixed(2));
+        if (crashTarget < baseStart) crashTarget = baseStart + 0.3;
 
-        btn.textContent = "COBRAR ($0)";
-        btn.style.background = "linear-gradient(180deg, #2b9348, #007200)";
+        btn.textContent = "COBRAR ($0.00)";
+        btn.style.background = "linear-gradient(180deg, #ff9900 0%, #cc7a00 100%)";
         document.getElementById('crashMultiplierText').className = 'crash-multiplier';
-        document.getElementById('crashMsg').textContent = "¡Nave en ascenso...!";
-        
+        document.getElementById('crashMsg').textContent = "¡Nave en ascenso... retírate a tiempo!";
+        triggerHaptic(20);
+
         crashStartTime = performance.now();
         runCrashLoop(baseStart);
       } else {
-        const win = Math.floor(bets.crash * crashMultiplier);
+        let win = bets.crash * crashMultiplier;
+        if (crashMultiplier >= 2.0) {
+          questProgress.q3++;
+          updateQuestsUI();
+        }
+        win = applyStreakWinBonus(win);
         balance += win;
         updateTopUI();
         crashActive = false;
         btn.textContent = "Despegar Nave";
         btn.style.background = "";
         document.getElementById('crashMsg').className = 'status-alert win';
-        document.getElementById('crashMsg').textContent = `¡Aterrizaje! ${crashMultiplier.toFixed(2)}x (+$${win})`;
+        document.getElementById('crashMsg').textContent = `¡Aterrizaje! ${crashMultiplier.toFixed(2)}x (+${formatMoney(win)})`;
         showConfetti();
         playSound(750, 0.2, 'triangle');
+        triggerHaptic(60);
       }
     }
 
     function runCrashLoop(baseStart = 1.0) {
       const elapsed = (performance.now() - crashStartTime) / 1000;
-      crashMultiplier = parseFloat((baseStart + 0.15 * Math.pow(elapsed, 1.8)).toFixed(2));
+      crashMultiplier = parseFloat((baseStart + 0.12 * Math.pow(elapsed, 1.9)).toFixed(2));
 
       document.getElementById('crashMultiplierText').textContent = `${crashMultiplier.toFixed(2)}x`;
       if (crashActive) {
-        document.getElementById('crashActionBtn').textContent = `COBRAR ($${Math.floor(bets.crash * crashMultiplier)})`;
+        document.getElementById('crashActionBtn').textContent = `COBRAR (${formatMoney(bets.crash * crashMultiplier)})`;
       }
 
       cCtx.clearRect(0, 0, crashCanvas.width, crashCanvas.height);
@@ -1387,7 +1678,7 @@
       const curY = startY - Math.min(maxH, (crashMultiplier - 1) * 20);
 
       const nextX = startX + Math.min(1, (elapsed + 0.05) / 8) * maxW;
-      const nextY = startY - Math.min(maxH, ((baseStart + 0.15 * Math.pow(elapsed + 0.05, 1.8)) - 1) * 20);
+      const nextY = startY - Math.min(maxH, ((baseStart + 0.12 * Math.pow(elapsed + 0.05, 1.9)) - 1) * 20);
       const shipAngle = Math.atan2(nextY - curY, nextX - curX);
 
       cCtx.beginPath();
@@ -1425,10 +1716,12 @@
         crashAnimId = requestAnimationFrame(() => runCrashLoop(baseStart));
       } else {
         crashActive = false;
+        resetStreak();
         document.getElementById('crashMultiplierText').className = 'crash-multiplier crashed';
         document.getElementById('crashMsg').className = 'status-alert';
         document.getElementById('crashMsg').textContent = `¡EXPLOSIÓN a ${crashMultiplier.toFixed(2)}x!`;
         playSound(120, 0.5, 'sawtooth');
+        triggerHaptic(140);
         const btn = document.getElementById('crashActionBtn');
         btn.textContent = "Despegar Nave";
         btn.style.background = "";
@@ -1503,8 +1796,13 @@
     }
     drawWheel();
 
-    function openWheelModal() { document.getElementById('wheelModal').classList.add('open'); }
-    function closeWheelModal() { document.getElementById('wheelModal').classList.remove('open'); }
+    function openWheelModal() {
+      document.getElementById('wheelModal').classList.add('open');
+      playChipClick();
+    }
+    function closeWheelModal() {
+      document.getElementById('wheelModal').classList.remove('open');
+    }
 
     function spinLuckyWheel() {
       if (isWheelSpinning) return;
@@ -1516,6 +1814,8 @@
 
       isWheelSpinning = true;
       document.getElementById('spinWheelBtn').disabled = true;
+      triggerHaptic(30);
+
       const prizeIndex = Math.floor(Math.random() * WHEEL_PRIZES.length);
       const arc = (Math.PI * 2) / WHEEL_PRIZES.length;
       const targetAngle = (Math.PI * 2 * 5) + (Math.PI * 1.5 - (prizeIndex * arc + arc / 2));
@@ -1538,7 +1838,8 @@
           updateTopUI();
           showConfetti();
           playSound(850, 0.3, 'square');
-          alert(`¡Ganaste $${winPrize} en la Ruleta VIP!`);
+          triggerHaptic(70);
+          alert(`¡Ganaste ${formatMoney(winPrize)} en la Ruleta VIP!`);
           document.getElementById('spinWheelBtn').disabled = false;
           closeWheelModal();
         }
@@ -1546,8 +1847,9 @@
       requestAnimationFrame(anim);
     }
 
-    // Inicialización final
+    // Inicialización de arranque
     applyTheme(currentTheme);
+    renderShopCatalog();
     updateTopUI();
   </script>
 </body>
