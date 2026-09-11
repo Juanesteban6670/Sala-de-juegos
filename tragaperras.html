@@ -147,7 +147,6 @@
       box-shadow: 0 0 8px var(--primary);
     }
 
-    /* JACKPOT Y TICKER SOCIAL */
     .jackpot-banner {
       width: 100%;
       max-width: 540px;
@@ -179,7 +178,6 @@
       border: 1px solid rgba(255,255,255,0.06);
     }
 
-    /* MEDIDOR DE RACHA */
     .streak-indicator {
       width: 100%;
       max-width: 540px;
@@ -193,8 +191,7 @@
       margin-bottom: 6px;
     }
 
-    /* NAVEGADORES */
-    nav, .nav-sub {
+    nav {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 6px;
@@ -202,7 +199,14 @@
       max-width: 540px;
       margin-bottom: 6px;
     }
-    .nav-sub { margin-bottom: 10px; }
+    .nav-sub {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+      width: 100%;
+      max-width: 540px;
+      margin-bottom: 10px;
+    }
 
     .nav-btn {
       background: var(--card-bg);
@@ -213,7 +217,7 @@
       border-radius: 12px;
       cursor: pointer;
       font-weight: 800;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       transition: all 0.2s;
     }
     .nav-btn.active {
@@ -223,7 +227,6 @@
       box-shadow: 0 0 14px var(--glow-accent);
     }
 
-    /* CAJA PRINCIPAL */
     .game-box {
       display: none;
       width: 100%;
@@ -240,7 +243,6 @@
     }
     .game-box.active { display: block; }
 
-    /* CONTROLES DE APUESTA */
     .bet-bar {
       display: flex;
       align-items: center;
@@ -405,53 +407,6 @@
     }
     .crash-multiplier.crashed { color: var(--danger); text-shadow: 0 0 15px var(--danger); }
 
-    /* LOOTBOX */
-    .lootbox-viewport {
-      width: 100%;
-      max-width: 320px;
-      height: 120px;
-      margin: 15px auto;
-      overflow: hidden;
-      position: relative;
-      border: 2px solid var(--accent);
-      border-radius: 14px;
-      background: #000;
-      box-shadow: 0 0 15px var(--glow-accent);
-    }
-    .lootbox-marker {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      width: 3px;
-      background: var(--primary);
-      transform: translateX(-50%);
-      z-index: 5;
-      box-shadow: 0 0 10px var(--primary);
-    }
-    .lootbox-track {
-      display: flex;
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-      will-change: transform;
-    }
-    .loot-card {
-      width: 100px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border-right: 1px solid #1a1a2e;
-      background: #11051c;
-    }
-    .loot-card.common { border-bottom: 4px solid #777; }
-    .loot-card.rare { border-bottom: 4px solid var(--accent); }
-    .loot-card.epic { border-bottom: 4px solid var(--primary); }
-    .loot-card.legendary { border-bottom: 4px solid var(--gold); }
-
     /* MISIONES DIARIAS */
     .mission-card {
       background: rgba(0,0,0,0.5);
@@ -478,7 +433,7 @@
     }
     .btn-claim:disabled { background: #333; color: #777; cursor: not-allowed; }
 
-    /* TIENDA & PERKS & BÓVEDA */
+    /* TIENDA & PERKS */
     .grid-cards {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -512,6 +467,79 @@
     .btn-buy.equipped { background: var(--success); color: #000; cursor: default; }
     .btn-buy:active:not(.equipped) { filter: brightness(0.9); }
 
+    /* BAZAR DE CANJE */
+    .bazaar-header {
+      background: linear-gradient(135deg, rgba(0,240,255,0.15), rgba(255,0,127,0.15));
+      border: 1px solid var(--accent);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .bazaar-points-badge {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--accent);
+      text-shadow: 0 0 10px var(--accent);
+    }
+    .bazaar-item {
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(0,240,255,0.2);
+      border-radius: 14px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: left;
+    }
+    .bazaar-icon { font-size: 1.6rem; margin-bottom: 4px; }
+    .bazaar-cost { color: var(--gold); font-weight: 800; font-size: 0.72rem; margin: 4px 0; }
+    .btn-redeem {
+      background: linear-gradient(135deg, var(--accent), #0088cc);
+      border: none;
+      color: #000;
+      font-weight: 900;
+      padding: 7px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.72rem;
+      margin-top: 6px;
+    }
+    .btn-redeem:active { transform: scale(0.95); }
+    .redeemed-vault {
+      margin-top: 14px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: left;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+    .vault-entry {
+      background: #0a0414;
+      border: 1px dashed var(--accent);
+      border-radius: 8px;
+      padding: 6px 10px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: monospace;
+      font-size: 0.75rem;
+    }
+    .btn-copy {
+      background: #250e38;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 3px 6px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.65rem;
+    }
+
     /* MODAL RULETA */
     .modal-overlay {
       display: none;
@@ -537,11 +565,128 @@
       box-shadow: 0 10px 40px rgba(0,0,0,0.8);
     }
     #wheelCanvas { border-radius: 50%; border: 4px solid var(--gold); margin: 12px auto; display: block; }
+
+    /* POP-UP MODAL NEÓN PERSONALIZADO (REEMPLAZO DE ALERT) */
+    .cyber-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(5, 1, 10, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .cyber-modal-overlay.open { display: flex; }
+
+    .cyber-modal-card {
+      background: linear-gradient(180deg, #1d0a2f 0%, #0c0416 100%);
+      border: 2px solid var(--accent);
+      border-radius: 22px;
+      padding: 24px 20px;
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 0 35px rgba(0, 240, 255, 0.35), inset 0 1px 0 rgba(255,255,255,0.2);
+      animation: modalPopIn 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+
+    @keyframes modalPopIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .cyber-modal-icon {
+      font-size: 2.8rem;
+      margin-bottom: 8px;
+      display: block;
+      filter: drop-shadow(0 0 10px var(--accent));
+    }
+
+    .cyber-modal-title {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .cyber-modal-desc {
+      font-size: 0.82rem;
+      color: #c7c1d4;
+      line-height: 1.4;
+      margin-bottom: 14px;
+    }
+
+    .cyber-modal-code-box {
+      background: #06010a;
+      border: 1px dashed var(--accent);
+      border-radius: 12px;
+      padding: 10px;
+      margin: 10px 0 16px 0;
+      font-family: monospace;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: 1.5px;
+      box-shadow: inset 0 0 12px rgba(0, 240, 255, 0.15);
+      word-break: break-all;
+    }
+
+    .cyber-modal-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-cyber-modal {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 900;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      transition: transform 0.1s;
+    }
+    .btn-cyber-modal:active { transform: scale(0.96); }
+
+    .btn-cyber-accept {
+      background: linear-gradient(135deg, var(--accent), #0077b6);
+      color: #000;
+      box-shadow: 0 4px 15px rgba(0, 240, 255, 0.4);
+    }
+    .btn-cyber-copy {
+      background: linear-gradient(135deg, var(--primary), #99004d);
+      color: #fff;
+      box-shadow: 0 4px 15px var(--glow-primary);
+    }
   </style>
 </head>
 <body>
 
   <canvas id="confettiCanvas"></canvas>
+
+  <!-- MODAL POP-UP PERSONALIZADO NEÓN -->
+  <div class="cyber-modal-overlay" id="cyberPopupModal">
+    <div class="cyber-modal-card">
+      <span class="cyber-modal-icon" id="cyberModalIcon">🎉</span>
+      <h3 class="cyber-modal-title" id="cyberModalTitle">¡CANJE EXITOSO!</h3>
+      <p class="cyber-modal-desc" id="cyberModalDesc">Tu recompensa ha sido procesada con éxito.</p>
+      <div class="cyber-modal-code-box" id="cyberModalCodeBox" style="display:none;">CODE-XXXX</div>
+      <div class="cyber-modal-actions">
+        <button class="btn-cyber-modal btn-cyber-copy" id="cyberModalCopyBtn" style="display:none;" onclick="copyCyberModalCode()">Copiar</button>
+        <button class="btn-cyber-modal btn-cyber-accept" onclick="closeCyberPopup()">Aceptar</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal Ruleta Diaria -->
   <div class="modal-overlay" id="wheelModal">
@@ -577,13 +722,13 @@
     </div>
   </header>
 
-  <!-- INNOVACIÓN 1: JACKPOT PROGRESIVO ACUMULATIVO -->
+  <!-- JACKPOT PROGRESIVO ACUMULATIVO -->
   <div class="jackpot-banner">
     <span class="jackpot-title">⚡ JACKPOT MAYOR</span>
     <span class="jackpot-val" id="jackpotValDisplay">$12,450.00</span>
   </div>
 
-  <!-- INNOVACIÓN 2: MEDIDOR DE RACHA GANADORA -->
+  <!-- MEDIDOR DE RACHA GANADORA -->
   <div class="streak-indicator">
     <span>🔥 RACHA: <strong id="streakCount">0</strong> VENCIDAS</span>
     <span>BONUS PRÓXIMO: <strong id="streakBonusPct">+0%</strong></span>
@@ -594,18 +739,19 @@
 
   <!-- Barra Juegos Principales -->
   <nav>
-    <button class="nav-btn active" onclick="switchGame('slots')">🎰 Slots</button>
-    <button class="nav-btn" onclick="switchGame('mines')">💎 Mines</button>
-    <button class="nav-btn" onclick="switchGame('plinko')">🟢 Plinko</button>
-    <button class="nav-btn" onclick="switchGame('crash')">🚀 Crash</button>
+    <button class="nav-btn active" id="btn-nav-slots" onclick="switchGame('slots')">🎰 Slots</button>
+    <button class="nav-btn" id="btn-nav-mines" onclick="switchGame('mines')">💎 Mines</button>
+    <button class="nav-btn" id="btn-nav-plinko" onclick="switchGame('plinko')">🟢 Plinko</button>
+    <button class="nav-btn" id="btn-nav-crash" onclick="switchGame('crash')">🚀 Crash</button>
   </nav>
 
   <!-- Barra Extensiones e Innovación -->
   <div class="nav-sub">
-    <button class="nav-btn" onclick="switchGame('vault')">⛏️ Bóveda</button>
-    <button class="nav-btn" onclick="switchGame('perks')">🃏 Perks</button>
-    <button class="nav-btn" onclick="switchGame('shop')">🎨 Tienda</button>
-    <button class="nav-btn" onclick="switchGame('quests')">🎯 Misiones</button>
+    <button class="nav-btn" id="btn-nav-vault" onclick="switchGame('vault')">⛏️ Bóveda</button>
+    <button class="nav-btn" id="btn-nav-perks" onclick="switchGame('perks')">🃏 Perks</button>
+    <button class="nav-btn" id="btn-nav-shop" onclick="switchGame('shop')">🎨 Tienda</button>
+    <button class="nav-btn" id="btn-nav-bazar" onclick="switchGame('bazar')">🎁 Bazar</button>
+    <button class="nav-btn" id="btn-nav-quests" onclick="switchGame('quests')">🎯 Misiones</button>
   </div>
 
   <!-- JUEGO 1: SLOTS -->
@@ -767,17 +913,38 @@
     </div>
   </div>
 
-  <!-- EXTENSIÓN 3: TIENDA DINÁMICA MEJORADA -->
+  <!-- EXTENSIÓN 3: TIENDA DINÁMICA -->
   <div class="game-box" id="game-shop">
     <h3 style="color:var(--gold); margin-bottom: 6px;">TIENDA & ARMERÍA VIP</h3>
     <p style="font-size: 0.75rem; color:#bbb;">Desbloquea aspectos exclusivos con balance real ficticio.</p>
 
-    <div class="grid-cards" id="shopCatalogContainer">
-      <!-- Generado dinámicamente con estado Comprar / Equipar / Equipado -->
+    <div class="grid-cards" id="shopCatalogContainer"></div>
+  </div>
+
+  <!-- EXTENSIÓN 4: BAZAR DE RECOMPENSAS FICTICIAS -->
+  <div class="game-box" id="game-bazar">
+    <h3 style="color:var(--gold); margin-bottom: 4px;">BAZAR DE RECOMPENSAS</h3>
+    <p style="font-size: 0.72rem; color:#bbb; margin-bottom: 10px;">Canjea tus Puntos Apex por códigos de tarjetas digitales ficticias.</p>
+
+    <div class="bazaar-header">
+      <div>
+        <span style="font-size:0.68rem; text-transform:uppercase; color:#ccc;">Tus Puntos Apex:</span>
+        <div class="bazaar-points-badge" id="bazaarPointsDisplay">0 PTS</div>
+      </div>
+      <div style="font-size:0.68rem; color:#aaa; text-align:right;">
+        Gana 10 PTS por cada $1 apostado<br>y bonos por victorias.
+      </div>
+    </div>
+
+    <div class="grid-cards" id="bazaarCardsContainer"></div>
+
+    <div class="redeemed-vault">
+      <strong style="font-size:0.75rem; color:var(--accent); display:block; margin-bottom:6px;">📦 BÓVEDA DE CÓDIGOS GENERADOS:</strong>
+      <div id="redeemedCodesList" style="font-size:0.72rem; color:#888;">No has canjeado ningún código aún.</div>
     </div>
   </div>
 
-  <!-- INNOVACIÓN 3: MISIONES DIARIAS -->
+  <!-- EXTENSIÓN 5: MISIONES DIARIAS -->
   <div class="game-box" id="game-quests">
     <h3 style="color:var(--gold); margin-bottom: 6px;">MISIONES DIARIAS</h3>
     <p style="font-size: 0.75rem; color:#bbb; margin-bottom: 12px;">Completa desafíos para reclamar recompensas en efectivo.</p>
@@ -813,6 +980,8 @@
     // ==========================================================
     let balance = parseFloat(localStorage.getItem('cc_balance')) || 1000.00;
     let totalXp = parseInt(localStorage.getItem('cc_xp')) || 0;
+    let apexPoints = parseInt(localStorage.getItem('cc_apex_points')) || 500;
+    let redeemedCodes = JSON.parse(localStorage.getItem('cc_redeemed_codes')) || [];
     let lastWheelTime = parseInt(localStorage.getItem('cc_wheel')) || 0;
     let passiveRate = parseFloat(localStorage.getItem('cc_passiverate')) || 0;
     let lastPassiveTime = parseInt(localStorage.getItem('cc_lastpassivetime')) || Date.now();
@@ -823,7 +992,6 @@
     let jackpotPool = parseFloat(localStorage.getItem('cc_jackpot')) || 12450.00;
     let winStreak = 0;
 
-    // Misiones
     let questProgress = JSON.parse(localStorage.getItem('cc_quests')) || { q1: 0, q2: 0, q3: 0, c1: false, c2: false, c3: false };
 
     const RANKS = [
@@ -841,6 +1009,8 @@
     function saveState() {
       localStorage.setItem('cc_balance', balance.toFixed(2));
       localStorage.setItem('cc_xp', totalXp);
+      localStorage.setItem('cc_apex_points', apexPoints);
+      localStorage.setItem('cc_redeemed_codes', JSON.stringify(redeemedCodes));
       localStorage.setItem('cc_wheel', lastWheelTime);
       localStorage.setItem('cc_passiverate', passiveRate);
       localStorage.setItem('cc_lastpassivetime', lastPassiveTime);
@@ -858,9 +1028,56 @@
       }
     }
 
+    // ==========================================================
+    // SISTEMA DE MODAL PERSONALIZADO
+    // ==========================================================
+    let currentActiveModalCode = "";
+
+    function openCyberPopup(title, desc, icon = "🎉", code = null) {
+      document.getElementById('cyberModalTitle').textContent = title;
+      document.getElementById('cyberModalDesc').textContent = desc;
+      document.getElementById('cyberModalIcon').textContent = icon;
+      
+      const codeBox = document.getElementById('cyberModalCodeBox');
+      const copyBtn = document.getElementById('cyberModalCopyBtn');
+
+      if (code) {
+        currentActiveModalCode = code;
+        codeBox.textContent = code;
+        codeBox.style.display = 'block';
+        copyBtn.style.display = 'block';
+      } else {
+        currentActiveModalCode = "";
+        codeBox.style.display = 'none';
+        copyBtn.style.display = 'none';
+      }
+
+      document.getElementById('cyberPopupModal').classList.add('open');
+      playChipClick();
+    }
+
+    function closeCyberPopup() {
+      document.getElementById('cyberPopupModal').classList.remove('open');
+      playChipClick();
+    }
+
+    function copyCyberModalCode() {
+      if (!currentActiveModalCode) return;
+      navigator.clipboard.writeText(currentActiveModalCode).then(() => {
+        const copyBtn = document.getElementById('cyberModalCopyBtn');
+        copyBtn.textContent = "¡COPIADO!";
+        setTimeout(() => copyBtn.textContent = "Copiar", 1500);
+      }).catch(() => {
+        prompt("Copia tu código:", currentActiveModalCode);
+      });
+    }
+
     function updateTopUI() {
       document.getElementById('globalBalance').textContent = formatMoney(balance);
       document.getElementById('jackpotValDisplay').textContent = formatMoney(jackpotPool);
+      
+      const bp = document.getElementById('bazaarPointsDisplay');
+      if (bp) bp.textContent = `${apexPoints.toLocaleString()} PTS`;
       
       let currentRank = RANKS[0];
       let nextRank = RANKS[1];
@@ -896,12 +1113,14 @@
       document.getElementById('streakBonusPct').textContent = `+${bonusPct}%`;
 
       updateQuestsUI();
+      renderBazaarCodesList();
       saveState();
     }
 
     function applyStreakWinBonus(amount) {
       const bonusPct = Math.min(25, winStreak * 5) / 100;
       winStreak++;
+      apexPoints += Math.floor(amount * 0.15);
       return amount * (1 + bonusPct);
     }
 
@@ -913,20 +1132,23 @@
     function addBetXp(amount) {
       const oldRank = document.getElementById('vipRankText').textContent;
       totalXp += Math.floor(amount);
-      jackpotPool += amount * 0.02; // El 2% de cada apuesta va al bote
+      apexPoints += Math.floor(amount * 10);
+      jackpotPool += amount * 0.02;
       updateTopUI();
       if (oldRank !== document.getElementById('vipRankText').textContent) {
         balance += 250.00;
+        apexPoints += 500;
         updateTopUI();
         showConfetti();
         playSound(800, 0.4, 'square');
         triggerHaptic(80);
-        alert("¡Ascenso de Rango VIP! Recibes +$250.00 en tu cuenta.");
+        openCyberPopup("¡ASCENSO VIP!", "Has alcanzado un nuevo nivel VIP. Bonificación de +$250.00 y +500 PTS acreditados.", "👑");
       }
     }
 
     function claimFaucet() {
       balance += 500.00;
+      apexPoints += 100;
       updateTopUI();
       playSound(600, 0.1, 'triangle');
       triggerHaptic(30);
@@ -963,13 +1185,24 @@
     }
 
     function switchGame(key) {
+      const targetScreen = document.getElementById(`game-${key}`);
+      if (!targetScreen) {
+        console.error(`Error: Pantalla game-${key} no encontrada.`);
+        return;
+      }
+
       document.querySelectorAll('.game-box').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('nav .nav-btn, .nav-sub .nav-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(`game-${key}`).classList.add('active');
-      event.target.classList.add('active');
+
+      targetScreen.classList.add('active');
+
+      const activeBtn = document.getElementById(`btn-nav-${key}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
       playChipClick();
       if (key === 'crash') resizeCrash();
       if (key === 'shop') renderShopCatalog();
+      if (key === 'bazar') renderBazaarCatalog();
     }
 
     // ==========================================================
@@ -1033,7 +1266,9 @@
 
     function claimVaultDividends() {
       const unclaimed = calculateUnclaimedDividends();
-      if (unclaimed <= 0) return alert("No hay dividendos acumulados por el momento.");
+      if (unclaimed <= 0) {
+        return openCyberPopup("BÓVEDA VACÍA", "No hay dividendos acumulados por el momento.", "⏳");
+      }
       balance += unclaimed;
       lastPassiveTime = Date.now();
       updateTopUI();
@@ -1044,7 +1279,9 @@
     }
 
     function buyMiner(tier, cost, rate) {
-      if (balance < cost) return alert("Saldo insuficiente para comprar esta estación minera.");
+      if (balance < cost) {
+        return openCyberPopup("SALDO INSUFICIENTE", "Necesitas más fondos para adquirir esta estación minera.", "⚠️");
+      }
       balance -= cost;
       passiveRate += rate;
       lastPassiveTime = Date.now();
@@ -1058,7 +1295,9 @@
     // SISTEMA DE PERKS
     // ==========================================================
     function buyPerk(key, price) {
-      if (balance < price) return alert("Saldo insuficiente.");
+      if (balance < price) {
+        return openCyberPopup("SALDO INSUFICIENTE", "No tienes balance suficiente para comprar esta carta de ventaja.", "⚠️");
+      }
       balance -= price;
       perks[key]++;
       updateTopUI();
@@ -1066,7 +1305,7 @@
     }
 
     // ==========================================================
-    // TIENDA DINÁMICA CON COMPRA Y EQUIPADO REAL
+    // TIENDA DINÁMICA
     // ==========================================================
     const SHOP_ITEMS = [
       { id: 'gold', type: 'theme', name: 'Tema: Oro Royale', price: 500, desc: 'Lujo satinado con destellos ámbar.' },
@@ -1079,6 +1318,7 @@
 
     function renderShopCatalog() {
       const container = document.getElementById('shopCatalogContainer');
+      if (!container) return;
       container.innerHTML = '';
 
       SHOP_ITEMS.forEach(item => {
@@ -1109,7 +1349,9 @@
     }
 
     function purchaseItem(type, id, price) {
-      if (balance < price) return alert("Saldo insuficiente para comprar este artículo.");
+      if (balance < price) {
+        return openCyberPopup("FONDOS INSUFICIENTES", "No dispones del saldo requerido para adquirir este cosmético.", "🛍️");
+      }
       balance -= price;
       unlockedItems.push(id);
       equipItem(type, id);
@@ -1136,20 +1378,131 @@
     }
 
     // ==========================================================
+    // BAZAR DE RECOMPENSAS
+    // ==========================================================
+    const BAZAAR_REWARDS = [
+      { id: 'steam5', icon: '🎮', name: 'Steam Card $5 USD', pts: 1500, prefix: 'STEAM' },
+      { id: 'psn10', icon: '🕹️', name: 'PlayStation $10 USD', pts: 2800, prefix: 'PSN' },
+      { id: 'netflix', icon: '🎬', name: '1 Mes Netflix Digital', pts: 2200, prefix: 'NFLX' },
+      { id: 'freefire', icon: '💎', name: '520 Diamantes Free Fire', pts: 1200, prefix: 'FF520' },
+      { id: 'spotify', icon: '🎵', name: '3 Meses Spotify Premium', pts: 2000, prefix: 'SPOT' },
+      { id: 'amazon10', icon: '📦', name: 'Gift Card Amazon $10', pts: 3000, prefix: 'AMZN' }
+    ];
+
+    function renderBazaarCatalog() {
+      const container = document.getElementById('bazaarCardsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      BAZAAR_REWARDS.forEach(item => {
+        const canRedeem = apexPoints >= item.pts;
+        const div = document.createElement('div');
+        div.className = 'bazaar-item';
+        div.innerHTML = `
+          <div>
+            <div class="bazaar-icon">${item.icon}</div>
+            <strong style="color:#fff; font-size:0.8rem;">${item.name}</strong>
+            <div class="bazaar-cost">⚡ ${item.pts.toLocaleString()} PUNTOS</div>
+          </div>
+          <button class="btn-redeem" ${canRedeem ? '' : 'disabled style="opacity:0.4; cursor:not-allowed;"'} onclick="redeemBazaarPrize('${item.id}')">
+            CANJEAR CÓDIGO
+          </button>
+        `;
+        container.appendChild(div);
+      });
+      renderBazaarCodesList();
+    }
+
+    function generateMockCode(prefix) {
+      const seg = () => Math.random().toString(36).substring(2, 6).toUpperCase();
+      return `${prefix}-${seg()}-${seg()}-${seg()}`;
+    }
+
+    function redeemBazaarPrize(rewardId) {
+      const item = BAZAAR_REWARDS.find(r => r.id === rewardId);
+      if (!item) return;
+
+      if (apexPoints < item.pts) {
+        return openCyberPopup("PUNTOS INSUFICIENTES", "No tienes suficientes Puntos Apex acumulados para realizar este canje.", "⚡");
+      }
+
+      apexPoints -= item.pts;
+      const mockCode = generateMockCode(item.prefix);
+      redeemedCodes.unshift({
+        name: item.name,
+        code: mockCode,
+        date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+
+      updateTopUI();
+      renderBazaarCatalog();
+      showConfetti();
+      playSound(850, 0.4, 'square');
+      triggerHaptic(80);
+
+      openCyberPopup(
+        "¡CANJE EXITOSO!",
+        `Has canjeado ${item.name}. Tu código ficticio generado ha sido archivado en tu bóveda:`,
+        "🎁",
+        mockCode
+      );
+    }
+
+    function renderBazaarCodesList() {
+      const listEl = document.getElementById('redeemedCodesList');
+      if (!listEl) return;
+
+      if (redeemedCodes.length === 0) {
+        listEl.innerHTML = '<span style="color:#666;">No has canjeado ningún código aún.</span>';
+        return;
+      }
+
+      listEl.innerHTML = redeemedCodes.map((entry) => `
+        <div class="vault-entry">
+          <div>
+            <strong style="color:#fff;">${entry.name}</strong><br>
+            <span style="color:var(--accent);">${entry.code}</span> <span style="font-size:0.6rem; color:#666;">(${entry.date})</span>
+          </div>
+          <button class="btn-copy" onclick="copyCodeToClipboard('${entry.code}')">Copiar</button>
+        </div>
+      `).join('');
+    }
+
+    function copyCodeToClipboard(code) {
+      navigator.clipboard.writeText(code).then(() => {
+        openCyberPopup("PORTAPAPELES", `Código ${code} copiado correctamente.`, "📋");
+      }).catch(() => {
+        prompt("Copia tu código:", code);
+      });
+    }
+
+    // ==========================================================
     // MISIONES DIARIAS
     // ==========================================================
     function updateQuestsUI() {
-      document.getElementById('q1Status').textContent = `Girar 5 veces en Slots (${Math.min(5, questProgress.q1)}/5)`;
-      document.getElementById('q2Status').textContent = `Destapar 8 gemas en Mines (${Math.min(8, questProgress.q2)}/8)`;
-      document.getElementById('q3Status').textContent = `Cobrar en Crash a > 2.00x (${Math.min(1, questProgress.q3)}/1)`;
+      const q1El = document.getElementById('q1Status');
+      if (q1El) q1El.textContent = `Girar 5 veces en Slots (${Math.min(5, questProgress.q1)}/5)`;
+      const q2El = document.getElementById('q2Status');
+      if (q2El) q2El.textContent = `Destapar 8 gemas en Mines (${Math.min(8, questProgress.q2)}/8)`;
+      const q3El = document.getElementById('q3Status');
+      if (q3El) q3El.textContent = `Cobrar en Crash a > 2.00x (${Math.min(1, questProgress.q3)}/1)`;
 
-      document.getElementById('q1Btn').disabled = !(questProgress.q1 >= 5 && !questProgress.c1);
-      document.getElementById('q2Btn').disabled = !(questProgress.q2 >= 8 && !questProgress.c2);
-      document.getElementById('q3Btn').disabled = !(questProgress.q3 >= 1 && !questProgress.c3);
+      const b1 = document.getElementById('q1Btn');
+      const b2 = document.getElementById('q2Btn');
+      const b3 = document.getElementById('q3Btn');
 
-      if (questProgress.c1) document.getElementById('q1Btn').textContent = 'COBRADA';
-      if (questProgress.c2) document.getElementById('q2Btn').textContent = 'COBRADA';
-      if (questProgress.c3) document.getElementById('q3Btn').textContent = 'COBRADA';
+      if (b1) {
+        b1.disabled = !(questProgress.q1 >= 5 && !questProgress.c1);
+        if (questProgress.c1) b1.textContent = 'COBRADA';
+      }
+      if (b2) {
+        b2.disabled = !(questProgress.q2 >= 8 && !questProgress.c2);
+        if (questProgress.c2) b2.textContent = 'COBRADA';
+      }
+      if (b3) {
+        b3.disabled = !(questProgress.q3 >= 1 && !questProgress.c3);
+        if (questProgress.c3) b3.textContent = 'COBRADA';
+      }
     }
 
     function claimQuest(num, reward) {
@@ -1157,10 +1510,12 @@
       if (num === 2) questProgress.c2 = true;
       if (num === 3) questProgress.c3 = true;
       balance += reward;
+      apexPoints += 250;
       updateTopUI();
       showConfetti();
       playSound(800, 0.3, 'square');
       triggerHaptic(50);
+      openCyberPopup("MISIÓN COMPLETADA", `Has reclamado +$${reward}.00 y +250 PTS Apex.`, "🎯");
     }
 
     // ==========================================================
@@ -1174,7 +1529,10 @@
       const game = BOT_GAMES[Math.floor(Math.random() * BOT_GAMES.length)];
       const win = Math.floor(Math.random() * 2500) + 120;
       const mult = (Math.random() * 15 + 1.2).toFixed(2);
-      document.getElementById('socialTicker').innerHTML = `🔥 <strong>${user}</strong> ganó <strong>${formatMoney(win)}</strong> (${mult}x) en ${game}!`;
+      const ticker = document.getElementById('socialTicker');
+      if (ticker) {
+        ticker.innerHTML = `🔥 <strong>${user}</strong> ganó <strong>${formatMoney(win)}</strong> (${mult}x) en ${game}!`;
+      }
       setTimeout(triggerSocialEvent, Math.random() * 4000 + 3000);
     }
     triggerSocialEvent();
@@ -1204,7 +1562,7 @@
     }
 
     // ==========================================================
-    // JUEGO 1: SLOTS (CON JACKPOT MAYOR 777)
+    // JUEGO 1: SLOTS
     // ==========================================================
     const SLOT_SYMBOLS = ['🍒', '🍋', '🍇', '🔔', '⭐', '7️⃣'];
     const SLOT_MULTIPLIERS = { '🍒': 4, '🍋': 8, '🍇': 15, '🔔': 25, '⭐': 50, '7️⃣': 100 };
@@ -1220,7 +1578,9 @@
 
     function spinSlots() {
       if (slotsSpinning) return;
-      if (balance < bets.slots) return alert("¡Saldo insuficiente!");
+      if (balance < bets.slots) {
+        return openCyberPopup("SALDO INSUFICIENTE", "Recarga fondos en el Cajero para poder girar.", "⚠️");
+      }
 
       balance -= bets.slots;
       addBetXp(bets.slots);
@@ -1278,16 +1638,17 @@
         const [s1, s2, s3] = targetSymbols;
 
         if (s1 === '7️⃣' && s2 === '7️⃣' && s3 === '7️⃣') {
-          // BOTE MAYOR
           const wonJackpot = jackpotPool;
           jackpotPool = 5000.00;
           balance += wonJackpot;
+          apexPoints += 5000;
           updateTopUI();
           document.getElementById('slotsMsg').className = 'status-alert win';
-          document.getElementById('slotsMsg').textContent = `¡JACKPOT MAYOR GANADO! ${formatMoney(wonJackpot)}`;
+          document.getElementById('slotsMsg').textContent = `¡JACKPOT MAYOR! ${formatMoney(wonJackpot)}`;
           showConfetti();
           playSound(900, 0.5, 'square');
           triggerHaptic(150);
+          openCyberPopup("¡JACKPOT MAYOR!", `¡Acabas de reventar el bote con 3x 7️⃣! Ganancia: ${formatMoney(wonJackpot)}`, "⚡");
         } else if (s1 === s2 && s2 === s3) {
           let win = bets.slots * SLOT_MULTIPLIERS[s1];
           win = applyStreakWinBonus(win);
@@ -1358,7 +1719,9 @@
 
     function toggleMinesRound() {
       if (!minesActive) {
-        if (balance < bets.mines) return alert("¡Saldo insuficiente!");
+        if (balance < bets.mines) {
+          return openCyberPopup("SALDO INSUFICIENTE", "Recarga saldo para iniciar una ronda en Mines.", "⚠️");
+        }
         balance -= bets.mines;
         addBetXp(bets.mines);
         minesActive = true;
@@ -1474,7 +1837,9 @@
     }
 
     function dropPlinkoBall() {
-      if (balance < bets.plinko) return alert("¡Saldo insuficiente!");
+      if (balance < bets.plinko) {
+        return openCyberPopup("SALDO INSUFICIENTE", "Recarga saldo para soltar bolas en Plinko.", "⚠️");
+      }
       balance -= bets.plinko;
       addBetXp(bets.plinko);
       playChipClick();
@@ -1550,7 +1915,7 @@
     updatePlinko();
 
     // ==========================================================
-    // JUEGO 4: CRASH CON TRAYECTORIA DINÁMICA & SKINS
+    // JUEGO 4: CRASH
     // ==========================================================
     const crashCanvas = document.getElementById('crashCanvas');
     const cCtx = crashCanvas.getContext('2d');
@@ -1613,7 +1978,9 @@
     function toggleCrash() {
       const btn = document.getElementById('crashActionBtn');
       if (!crashActive) {
-        if (balance < bets.crash) return alert("¡Saldo insuficiente!");
+        if (balance < bets.crash) {
+          return openCyberPopup("SALDO INSUFICIENTE", "Recarga saldo para despegar en Crash.", "⚠️");
+        }
         balance -= bets.crash;
         addBetXp(bets.crash);
         crashActive = true;
@@ -1809,7 +2176,7 @@
       const now = Date.now();
       if (now - lastWheelTime < 60000) {
         const left = Math.ceil((60000 - (now - lastWheelTime)) / 1000);
-        return alert(`Espera ${left}s para volver a girar la ruleta gratis.`);
+        return openCyberPopup("TIEMPO DE ESPERA", `Debes esperar ${left} segundos para volver a girar la ruleta gratis.`, "⏱️");
       }
 
       isWheelSpinning = true;
@@ -1835,21 +2202,23 @@
           lastWheelTime = Date.now();
           const winPrize = WHEEL_PRIZES[prizeIndex];
           balance += winPrize;
+          apexPoints += 200;
           updateTopUI();
           showConfetti();
           playSound(850, 0.3, 'square');
           triggerHaptic(70);
-          alert(`¡Ganaste ${formatMoney(winPrize)} en la Ruleta VIP!`);
           document.getElementById('spinWheelBtn').disabled = false;
           closeWheelModal();
+          openCyberPopup("¡RULETA VIP!", `Has obtenido ${formatMoney(winPrize)} y +200 PTS Apex de recompensa.`, "🎰");
         }
       }
       requestAnimationFrame(anim);
     }
 
-    // Inicialización de arranque
+    // Inicialización al cargar la página
     applyTheme(currentTheme);
     renderShopCatalog();
+    renderBazaarCatalog();
     updateTopUI();
   </script>
 </body>
